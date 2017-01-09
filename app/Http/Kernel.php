@@ -15,6 +15,9 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        // ADDED
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
     ];
 
     /**
@@ -33,6 +36,10 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            // ADDED
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            // ADDED
             'throttle:60,1',
             'bindings',
         ],

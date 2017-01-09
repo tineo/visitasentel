@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 //use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User implements \Illuminate\Contracts\Auth\Authenticatable
+class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\CanResetPassword
 {
     use \LaravelDoctrine\ORM\Auth\Authenticatable;
 
@@ -186,4 +186,25 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable
     ];
 
 
+    /**
+     * Get the e-mail address where password reset links are sent.
+     *
+     * @return string
+     */
+    public function getEmailForPasswordReset()
+    {
+        // TODO: Implement getEmailForPasswordReset() method.
+        return $this->email;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        // TODO: Implement sendPasswordResetNotification() method.
+    }
 }

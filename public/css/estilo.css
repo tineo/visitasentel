@@ -1,11 +1,30 @@
+input.text { margin-bottom:12px; width:95%; padding: .2em .4em;  font-size: .9em;}
+fieldset { padding:0; border:0; margin-top:25px; }
+h1 { font-size: 1.2em; margin: .6em 0; }
+div#users-contain { width: 350px; margin: 20px 0; }
+div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+.ui-dialog .ui-state-error { padding: .3em; }
+.validateTips { border: 1px solid transparent; padding: 0.3em; }
+
+.ui-dialog label{width: 33%; font-size: .75em; }
+.ui-dialog input{width: 65% !important;}
+
+.ui-dialog label, .ui-dialog input { display:inline-table;}
+
 
 .table{
-    overflow: scroll; /* Scrollbar are always visible */
-    overflow: auto;   /* Scrollbar is displayed as it's needed */
+    /*overflow: scroll; /* Scrollbar are always visible */
+    /*overflow: auto;   /* Scrollbar is displayed as it's needed */
+    width: 99%;
 }
 
+.table thead th{
+    text-transform:capitalize;
+    cursor: pointer;
+}
 .table tbody td{
-
+    border: dotted #f2dede 1px;
 }
 
 .table tbody td:not(.horas):hover{
@@ -31,4 +50,38 @@
 
 .table tbody td.green{
     background-color: #83f27e;
+}
+
+.dia-selected{
+    background-color: #4686ba;
+}
+
+#onemore{
+    float: right;
+}
+
+label.error{
+    display: block;
+    color: #761c19;
+    width: 100%;
+    text-align: right;
+    margin-top: -6px;
+    padding: .1em .4em .1em .2em;
+}
+
+@media screen and (max-width: 767px){
+    .ui-dialog  label, .ui-dialog  input { display:block !important; width: 100% !important;}
+    .ui-dialog{
+
+        z-index: 100 !important;
+        /*margin: 10px !important;*/
+        width: 100% !important;
+        top: 50px !important;
+    }
+
+    .ui-dialog .text:nth-of-type(6), .ui-dialog .text:nth-of-type(7){
+        width: 50% !important;
+        display:inline-table !important;
+    }
+
 }

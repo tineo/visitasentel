@@ -13,13 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
+/*Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
 
 Route::resource('tracking', 'TrackingController',
     ['only' => ['index', 'store', 'update', 'destroy', 'show']]);
-
-Route::resource('tienda', 'TiendaController',
-    ['only' => ['index', 'store','create', 'update', 'destroy', 'show']]);
+*/
+Route::resource('visitas', 'VisitasController',
+    ['only' => ['store']]);
