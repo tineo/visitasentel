@@ -126,7 +126,7 @@
     <!-- <script src="/js/app.js"></script> -->
 
     @yield('js')
-    @if(getHostByName(getHostName()) !== "127.0.0.1")
+    @if( getHostByName(getHostName()) !== "127.0.1.1")
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
