@@ -68,9 +68,9 @@
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <!--<ul class="nav navbar-nav">
-                    &nbsp;
-                </ul>-->
+                {{--<ul class="nav navbar-nav">
+                    {{ getHostByName(getHostName()) }}
+                </ul>--}}
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -124,7 +124,9 @@
 
 
     <!-- <script src="/js/app.js"></script> -->
+
     @yield('js')
+    @if(getHostByName(getHostName()) !== "127.0.0.1")
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -155,5 +157,7 @@
             </a></div>
     </noscript>
     <!-- End of StatCounter Code for Dreamweaver -->
+    @endif
+
 </body>
 </html>

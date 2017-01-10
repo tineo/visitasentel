@@ -97,7 +97,7 @@
             </div>
         </div>
     </body>
-
+    @if(getHostByName(getHostName()) !== "127.0.0.1")
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -110,7 +110,7 @@
     </script>
 
     <!-- Start of StatCounter Code for Dreamweaver -->
-    <script type="text/javascript">
+     <script type="text/javascript">
         var sc_project=11215030;
         var sc_invisible=1;
         var sc_security="4fd03f83";
@@ -127,4 +127,5 @@
             </a></div>
     </noscript>
     <!-- End of StatCounter Code for Dreamweaver -->
+    @endif
 </html>
