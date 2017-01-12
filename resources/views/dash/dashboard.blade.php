@@ -329,7 +329,9 @@
                     $( this ).dialog( "close" );
                 },
                 buttons: {
-                    "Registar visita": function() {
+                    "Registar visita": function(event) {
+
+                        $(event.target).prop('disabled', true);
                         if($("#visitaform").valid()){
 
                             $.ajax({ method: "POST", url: "/api/visitas",
@@ -363,6 +365,7 @@
                                 validator.resetForm();
                                 $(".dia-selected").removeClass('dia-selected');
                                 $( this ).dialog( "close" );
+                                $(event.target).prop('disabled', false);
                             }.bind(this));
 
                         }
