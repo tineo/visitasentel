@@ -90,14 +90,6 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
     animation-iteration-count: infinite;
 }
 
-.text {
-    left: 0;
-    position:absolute;
-    text-align:center;
-    top: 30px;
-    width: 100%
-}
-
 #current_day{
     display: none;
 }
