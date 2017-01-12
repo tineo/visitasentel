@@ -412,7 +412,7 @@
                 });
 
 
-                $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                $.when($.ajax({ method: "GET", url: "/api/visitas/bydate",
                     data: {
                         fecha: new_day.format('DD/MM/YYYY'),
                         offset: 1
@@ -437,12 +437,13 @@
                             if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
 
                         });
-                        $(event.target).prop('disabled', false);
 
-                    })
 
-                }.bind(this));
+                    }.bind(this))
 
+                }.bind(this))).then(function(){
+                    $(event.target).prop('disabled', false);
+                });
                 makeclickable($('td[data-day="d_'+new_m.format("DD_MM_YYYY")+'"]'));
 
             });
@@ -465,7 +466,7 @@
 
                 });
 
-                $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                $.when($.ajax({ method: "GET", url: "/api/visitas/bydate",
                     data: {
                         fecha: past_day.format('DD/MM/YYYY'),
                         offset: 1
@@ -490,12 +491,13 @@
                             if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
 
                         });
-                        $(event.target).prop('disabled', false);
+
 
                     })
 
-                }.bind(this));
-
+                }.bind(this))).then(function () {
+                    $(event.target).prop('disabled', false);
+                });
                 makeclickable($('td[data-day="d_'+past_day.format("DD_MM_YYYY")+'"]'));
 
             });
