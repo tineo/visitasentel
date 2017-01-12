@@ -19,8 +19,9 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Visitas programadas <span id="current_day"></span></div>
-                    <div class="panel-heading">
+                    <div class="panel-heading" id="controles">
                         <button class="ui-button ui-widget ui-corner-all" id="oneless"><<</button>
+                        <input type="text" id="datepicker">
                         <button class="ui-button ui-widget ui-corner-all" id="onemore">>></button>
 
                     </div>
@@ -60,23 +61,28 @@
 
                             <?php $now = new \DateTime();
                             $now->setTime(8,0);
+                            $then = new \DateTime();
+                            $then->setTime(8,0);
+                            $then->add(new \DateInterval('PT30M'));
                             ?>
 
                             @for ($i = 0; $i < 22; $i++)
                                 <tr>
 
-                                    <td class="horas">{{ $now->format('H:i') }}</td>
+                                    <td class="horas">{{ $now->format('H:i') }} - {{ $then->format('H:i') }}</td>
 
                                     @for ($j = 0; $j < 7; $j++)
                                         <td
                                                 data-day="{{ "d_".$now->format('d_m_Y') }}"
                                                 data-hour="{{ "d_".$now->format('H_i') }}"
+                                                data-hourfin="{{ "d_".$then->format('H_i') }}"
                                         >{{-- $now->format('d/m/Y H:i') --}}</td>
                                         <?php $now->modify('+1 day')?>
                                     @endfor
                                     <?php $now->modify('-7 day')?>
                                 </tr>
-                                <?php $now->add(new \DateInterval('PT30M'))?>
+                                <?php $now->add(new \DateInterval('PT30M')) ?>
+                                <?php $then->add(new \DateInterval('PT30M')) ?>
 
                             @endfor
 
@@ -127,6 +133,10 @@
     </div>
     <!-- /.modal -->
 
+    <div id="dialog_adv" title="Advertencia">
+        <p>Este horario no es disponible.</p>
+    </div>
+
 
 
 @endsection
@@ -155,7 +165,98 @@
 
         $(function() {
             moment.locale("es");
-            //console.log(moment.locale());
+
+            $('#current_day').text(moment().format('DD/MM/YYYY'));
+            $('#datepicker').val(moment().format('DD/MM/YYYY'));
+
+            var datePicker =  $( "#datepicker" ).datepicker({
+                dateFormat: 'dd/mm/yy',
+                onSelect: function(dateText, inst) {
+                    $('#current_day').text( $('#datepicker').val() );
+
+                    $.when().then(function(){
+                        for(var i=0; i<7; i++) {
+                            $('.table thead tr th').eq(1).remove();
+                        }
+                        var next_day = moment($('#current_day').text(), 'DD/MM/YYYY');
+                        for(var i=0; i<7; i++) {
+                            $('.table thead tr').append("<th title='" + next_day.format('DD/MM/YYYY') + "'>" + next_day.format('dddd DD') + "</th>");
+                            next_day.add(1, 'days');
+                        }
+
+                        var cur_day = moment($('#current_day').text(), 'DD/MM/YYYY');
+                        cur_day.hours(8);
+                        cur_day.minutes(0);
+                        $('.table tbody tr').each(function (k,v) {
+                            $(this).find("td").not(".horas").each(function (ke,va) {
+                                //$(this).text(cur_day.format('DD/MM/YYYY HH:mm'));
+                                $(this).attr("data-day","d_"+cur_day.format('DD_MM_YYYY'));
+                                $(this).attr("data-hour","d_"+cur_day.format('HH_mm'));
+                                cur_day.add(30, 'minutes');
+                                $(this).attr("data-hourfin","d_"+cur_day.format('HH_mm'));
+                                cur_day.subtract(30, 'minutes');
+                                cur_day.add(1, 'days');
+
+                            });
+                            cur_day.add(30, 'minutes');
+
+                            cur_day.subtract(7, 'days');
+
+                        });
+
+                        $('.table tbody tr td').removeClass("nodisponible");
+                    }).then(function () {
+                        $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                            data: {
+                                fecha: $('#current_day').text(),
+                                offset: 7
+                            }
+                        }).done(function (msg) {
+
+                            $.each(msg,function (k,v) {
+
+                                var hini = moment(v.horaini.date);
+                                var hfin = moment(v.horafin.date);
+
+                                var curini = moment(v.fecha.date);
+                                curini.hour(hini.hour());
+                                curini.minute(hini.minute());
+
+                                var curfin = moment(v.fecha.date);
+                                curfin.hour(hfin.hour());
+                                curfin.minute(hfin.minute());
+
+                                $('td[data-day="d_'+curini.format("DD_MM_YYYY")+'"').each(function (k,v) {
+                                    var cur = moment(curini.format("DD_MM_YYYY")+" "+$(this).attr('data-hour'), "DD_MM_YYYY HH:mm");
+                                    if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
+
+                                });
+
+                            })
+
+                        }.bind(this));
+                    }.bind(this));
+
+
+
+
+
+
+
+
+                }
+            });
+
+            var isMobile = window.matchMedia("only screen and (max-width: 760px)");
+
+            if (!isMobile.matches) {
+                $(window).resize(function() {
+                    datePicker.datepicker('hide');
+                    $('#datepicker').blur();
+                });
+            }
+            $( "#datepicker" ).datepicker({ dateFormat: 'dd/mm/yy'});
+
             var validator = $("#visitaform").validate({
                 rules: {
                     dni: {
@@ -166,16 +267,51 @@
                     },
                 },
                 submitHandler: function(form) {
-                    // some other code
-                    // maybe disabling submit button
-                    // then:
-                    //$(form).submit();
-                    alert("hey");
-                    $('#visitaform input[type="submit"]').attr("disable", "disable")
+                    $('#visitaform input[type="submit"]').attr("disable", "disable");
                 }
             });
 
-            $('#current_day').text(moment().format('DD/MM/YYYY'));
+            $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                data: {
+                    fecha: $("#current_day").text(),
+                    offset: 7
+                }
+            }).done(function (msg) {
+
+                $.each(msg,function (k,v) {
+
+                    var hini = moment(v.horaini.date);
+                    var hfin = moment(v.horafin.date);
+
+                    var curini = moment(v.fecha.date);
+                    curini.hour(hini.hour());
+                    curini.minute(hini.minute());
+
+                    var curfin = moment(v.fecha.date);
+                    curfin.hour(hfin.hour());
+                    curfin.minute(hfin.minute());
+
+                    $('td[data-day="d_'+curini.format("DD_MM_YYYY")+'"').each(function (k,v) {
+                        var cur = moment(curini.format("DD_MM_YYYY")+" "+$(this).attr('data-hour'), "DD_MM_YYYY HH:mm");
+                        if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
+
+                    });
+
+                })
+
+            }.bind(this));
+
+            $( "#dialog_adv" ).dialog({
+                autoOpen: false,
+                resizable: false,
+                height: "auto",
+                width: 250,
+                modal: true,
+                show: {
+                    effect: "shake",
+                    duration: 600
+                }
+            });
 
             $( "#dialog_new" ).dialog({
                 autoOpen: false,
@@ -211,7 +347,18 @@
                                     nombre: $("#nombre").val()
                                 }
                             }).done(function (msg) {
-                                alert(msg.code);
+                                var dataday = $('.dia-selected').attr('data-day');
+                                var ini = moment(dataday+" "+$("#horaini").val(), "DD_MM_YYYY HH:mm");
+                                var fin = moment(dataday+" "+$("#horafin").val(), "DD_MM_YYYY HH:mm");
+
+                                $('td[data-day="'+dataday+'"').each(function (k,v) {
+                                    var cur = moment(dataday+" "+$(this).attr('data-hour'), "DD_MM_YYYY HH:mm");
+
+                                    if((cur.isAfter(ini) && cur.isBefore(fin)) || cur.isSame(ini)){
+                                        $(this).addClass("nodisponible");
+                                    }
+
+                                });
 
                                 validator.resetForm();
                                 $(".dia-selected").removeClass('dia-selected');
@@ -233,6 +380,7 @@
                 var new_day = moment($('#current_day').text(),'DD/MM/YYYY').add(7,'days');
                 var next_day = moment($('#current_day').text(),'DD/MM/YYYY').add(1,'days');
                 $('#current_day').text(next_day.format('DD/MM/YYYY'));
+                $('#datepicker').val(next_day.format('DD/MM/YYYY'));
 
                 $('.table thead tr').append("<th title='"+new_day.format('DD/MM/YYYY')+"'>" + new_day.format('dddd DD') + "</th>");
 
@@ -245,8 +393,9 @@
                 $('.table tbody').find("tr").each(function (k, v) {
 
                     var aux_m = moment(new_m.format('DD_MM_YYYY') + " " +$(this).find("td").eq(0).text(), "DD_MM_YYYY HH:mm");
+                    var aux_mf = moment(new_m.format('DD_MM_YYYY') + " " +$(this).find("td").eq(0).text(), "DD_MM_YYYY HH:mm").add(30, 'minutes');
                     //$(this).append('<td data-day="d_'+aux_m.format('DD_MM_YYYY')+'" data-hour="d_'+aux_m.format('HH_mm')+'">'+aux_m.format('DD/MM/YYYY HH:mm')+'</td>');
-                    $(this).append('<td data-day="d_'+aux_m.format('DD_MM_YYYY')+'" data-hour="d_'+aux_m.format('HH_mm')+'"></td>');
+                    $(this).append('<td data-day="d_'+aux_m.format('DD_MM_YYYY')+'" data-hour="d_'+aux_m.format('HH_mm')+'" data-hourfin="d_'+aux_mf.format('HH_mm')+'"></td>');
 
                     $(this).find("td").eq(1).hide().remove();
 
@@ -258,6 +407,37 @@
 
                 });
 
+
+                $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                    data: {
+                        fecha: new_day.format('DD/MM/YYYY'),
+                        offset: 1
+                    }
+                }).done(function (msg) {
+
+                    $.each(msg,function (k,v) {
+
+                        var hini = moment(v.horaini.date);
+                        var hfin = moment(v.horafin.date);
+
+                        var curini = moment(v.fecha.date);
+                        curini.hour(hini.hour());
+                        curini.minute(hini.minute());
+
+                        var curfin = moment(v.fecha.date);
+                        curfin.hour(hfin.hour());
+                        curfin.minute(hfin.minute());
+
+                        $('td[data-day="d_'+curini.format("DD_MM_YYYY")+'"').each(function (k,v) {
+                            var cur = moment(curini.format("DD_MM_YYYY")+" "+$(this).attr('data-hour'), "DD_MM_YYYY HH:mm");
+                            if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
+
+                        });
+
+                    })
+
+                }.bind(this));
+
                 makeclickable($('td[data-day="d_'+new_m.format("DD_MM_YYYY")+'"]'));
 
             });
@@ -266,6 +446,7 @@
 
                 var past_day = moment($('#current_day').text(),'DD/MM/YYYY').subtract(1,'days');
                 $('#current_day').text(past_day.format('DD/MM/YYYY'));
+                $('#datepicker').val(past_day.format('DD/MM/YYYY'));
                 $('.table thead').find("tr").each(function (k, v) {
                     $(this).find("th").last().hide().remove();
                     $("<th title='"+past_day.format('DD/MM/YYYY')+"'>"+past_day.format('dddd DD') +"</th>").insertAfter($(this).find("th").eq(0));
@@ -273,11 +454,41 @@
 
                 $('.table tbody').find("tr").each(function (k, v) {
                     var aux_m = moment(past_day.format('DD_MM_YYYY') + " " +$(this).find("td").eq(0).text(), "DD_MM_YYYY HH:mm");
+                    var aux_mf = moment(aux_m.format('DD_MM_YYYY') + " " +$(this).find("td").eq(0).text(), "DD_MM_YYYY HH:mm").add(30, 'minutes');
                     $(this).find("td").last().hide().remove();
-                    //$('<td data-day="d_'+aux_m.format('DD_MM_YYYY')+'" data-hour="d_'+aux_m.format('HH_mm')+'">'+aux_m.format('DD/MM/YYYY HH:mm')+'</td>').insertAfter($(this).find("td").eq(0));
-                    $('<td data-day="d_'+aux_m.format('DD_MM_YYYY')+'" data-hour="d_'+aux_m.format('HH_mm')+'"></td>').insertAfter($(this).find("td").eq(0));
+                    $('<td data-day="d_'+aux_m.format('DD_MM_YYYY')+'" data-hour="d_'+aux_m.format('HH_mm')+'" data-hourfin="d_'+aux_mf.format('HH_mm')+'"></td>').insertAfter($(this).find("td").eq(0));
 
                 });
+
+                $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                    data: {
+                        fecha: past_day.format('DD/MM/YYYY'),
+                        offset: 1
+                    }
+                }).done(function (msg) {
+
+                    $.each(msg,function (k,v) {
+
+                        var hini = moment(v.horaini.date);
+                        var hfin = moment(v.horafin.date);
+
+                        var curini = moment(v.fecha.date);
+                        curini.hour(hini.hour());
+                        curini.minute(hini.minute());
+
+                        var curfin = moment(v.fecha.date);
+                        curfin.hour(hfin.hour());
+                        curfin.minute(hfin.minute());
+
+                        $('td[data-day="d_'+curini.format("DD_MM_YYYY")+'"').each(function (k,v) {
+                            var cur = moment(curini.format("DD_MM_YYYY")+" "+$(this).attr('data-hour'), "DD_MM_YYYY HH:mm");
+                            if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
+
+                        });
+
+                    })
+
+                }.bind(this));
 
                 makeclickable($('td[data-day="d_'+past_day.format("DD_MM_YYYY")+'"]'));
 
@@ -286,29 +497,67 @@
             makeclickable($('.table td:not(.horas)'));
 
             function makeclickable(element) {
-                //$('.table td:not(.horas)').on( "click", function () {
-                element.click(function () {
-                //$('.table td:not(.horas)').click(function () {
-                    //console.log(123);
 
-                    if($(".dia-selected").length <1){
-                        $(this).addClass('dia-selected');
-                    }else if($(".dia-selected").length < 2){
-                        if($(this).attr("data-day") == $(".dia-selected").eq(0).attr("data-day")){
+                element.click(function (event) {
+
+                    if($(event.target).hasClass('nodisponible')){
+
+                        $("#dialog_adv").dialog('open');
+
+                    }else {
+
+                        if ($(".dia-selected").length < 1) {
                             $(this).addClass('dia-selected');
-                            var sel1 = moment($('.dia-selected').eq(0).attr('data-day') +" " +
-                                ""+$('.dia-selected').eq(0).attr('data-hour'), "[d]_DD_MM_YYYY [d]_HH_mm" );
-                            var sel2 = moment($('.dia-selected').eq(1).attr('data-day') +" " +
-                                ""+$('.dia-selected').eq(1).attr('data-hour'), "[d]_DD_MM_YYYY [d]_HH_mm" );
+                        } else if ($(".dia-selected").length < 2) {
+                            if ($(this).attr("data-day") == $(".dia-selected").eq(0).attr("data-day")) {
+                                $(this).addClass('dia-selected');
 
-                            $("#fecha").val(sel1.format('DD/MM/YYYY'));
-                            $("#tiempo").val(sel1.format('HH:mm')+ " - " +sel2.format('HH:mm'));
-                            $("#horaini").val(sel1.format('HH:mm'));
-                            $("#horafin").val(sel2.format('HH:mm'));
-                            $( "#dialog_new" ).dialog('open');
+                                var sel1 = moment($('.dia-selected').eq(0).attr('data-day') + " " +
+                                    "" + $('.dia-selected').eq(0).attr('data-hour'), "[d]_DD_MM_YYYY [d]_HH_mm");
+
+                                if($(".dia-selected").length > 1) {
+
+                                    var inis = moment($('.dia-selected').eq(0).attr('data-day') + " " +
+                                        "" + $('.dia-selected').eq(0).attr('data-hour'), "[d]_DD_MM_YYYY [d]_HH_mm");
+
+                                    var fins = moment($('.dia-selected').eq(1).attr('data-day') + " " +
+                                        "" + $('.dia-selected').eq(1).attr('data-hour'), "[d]_DD_MM_YYYY [d]_HH_mm");
+                                    do{
+                                        inis.add(30,"minutes");
+
+                                        $("td[data-hour='d_"+inis.format('HH_mm')+"']").each(function (kee,vaa) {
+                                            if($(this).attr("data-day") == inis.format("[d]_DD_MM_YYYY")){
+
+                                                if($(this).hasClass("nodisponible")){
+                                                    $("#dialog_adv").dialog('open');
+                                                    $(".dia-selected").removeClass('dia-selected');
+                                                    return;
+                                                }
+                                            }
+                                        })
+                                    }
+                                    while (! inis.isSame(fins));
+
+                                    var sel2 = moment($('.dia-selected').eq(1).attr('data-day') + " " +
+                                        "" + $('.dia-selected').eq(1).attr('data-hourfin'), "[d]_DD_MM_YYYY [d]_HH_mm");
+
+                                }else{
+                                    var sel2 = moment($('.dia-selected').eq(0).attr('data-day') + " " +
+                                        "" + $('.dia-selected').eq(0).attr('data-hourfin'), "[d]_DD_MM_YYYY [d]_HH_mm");
+                                }
+
+                                if(!$('#dialog_adv').dialog('isOpen')) {
+                                    $("#fecha").val(sel1.format('DD/MM/YYYY'));
+                                    $("#tiempo").val(sel1.format('HH:mm') + " - " + sel2.format('HH:mm'));
+                                    $("#horaini").val(sel1.format('HH:mm'));
+                                    $("#horafin").val(sel2.format('HH:mm'));
+                                    $("#dialog_new").dialog('open');
+                                }
+                            }
                         }
                     }
                 });
+
             }
 
         });

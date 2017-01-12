@@ -27,7 +27,7 @@
                                         <td> {{ $visita->getVisitante()->getDNI() }} </td>
                                         <td> {{ $visita->getContacto() }} </td>
                                         <td> {{ $visita->getPiso() }} </td>
-                                        <td> {{ $visita->getFecha() }} - {{ $visita->getHoraini() }}  / {{ $visita->getHorafin() }} </td>
+                                        <td> {{ $visita->getFecha()->format('d/m/Y') }} - {{ $visita->getHoraini()->format('H:i') }}  / {{ $visita->getHorafin()->format('H:i') }} </td>
 
                                     </tr>
                                 @endforeach

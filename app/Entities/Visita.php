@@ -23,13 +23,13 @@ class Visita
      */
     private $idvisita;
 
-    /** @ORM\Column(type="string", nullable=true) */
+    /** @ORM\Column(type="date", nullable=true) */
     private $fecha;
 
-    /** @ORM\Column(type="string", nullable=true) */
+    /** @ORM\Column(type="time", nullable=true) */
     private $horaini;
 
-    /** @ORM\Column(type="string", nullable=true) */
+    /** @ORM\Column(type="time", nullable=true) */
     private $horafin;
 
     /** @ORM\Column(type="string", nullable=true) */

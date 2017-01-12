@@ -23,3 +23,8 @@ Route::resource('tracking', 'TrackingController',
 */
 Route::resource('visitas', 'VisitasController',
     ['only' => ['store']]);
+
+/*Route::resource('dashboard', 'DashController',
+    ['only' => ['store']]);*/
+
+Route::get('visitas/bydate', ['uses' => 'VisitasController@bydate', 'as' => 'visitas.bydate']);

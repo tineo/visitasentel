@@ -100,9 +100,11 @@ class VisitasController extends Controller
         $visita->setArea($request->get('area'));
         $visita->setContacto($request->get('contacto'));
         $visita->setEmpresa($request->get('empresa'));
-        $visita->setFecha($request->get('fecha'));
-        $visita->setHoraini($request->get('horaini'));
-        $visita->setHorafin($request->get('horafin'));
+
+        $visita->setFecha(\DateTime::createFromFormat('d/m/Y', $request->get('fecha')));
+        $visita->setHoraini(\DateTime::createFromFormat('H:i', $request->get('horaini')));
+        $visita->setHorafin(\DateTime::createFromFormat('H:i', $request->get('horafin')));
+
         $visita->setMotivo($request->get('motivo'));
         $visita->setPiso($request->get('piso'));
         $visita->setRegisterby( Auth::id() );
@@ -191,5 +193,32 @@ class VisitasController extends Controller
         }
 
         return view('visitas.index', array("visitas" => $data));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function bydate(Request $request)
+    {
+        $offset = 1;
+        if($request->get('fecha') !== null) $offset = $request->get('offset');
+        //
+        if($offset < 2 ){
+            $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.fecha = :fecha");
+            $query->setParameter("fecha", \DateTime::createFromFormat('d/m/Y', $request->get('fecha'))->format('Y-m-d') );
+            $visitas = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }else{
+            $fecha = \DateTime::createFromFormat('d/m/Y', $request->get('fecha'));
+            $fechalimit = \DateTime::createFromFormat('d/m/Y', $request->get('fecha'))->modify('+'.($offset-1).' day');
+            $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.fecha BETWEEN :fecha1 AND :fecha2");
+            $query->setParameter("fecha1", $fecha->format('Y-m-d') );
+            $query->setParameter("fecha2", $fechalimit->format('Y-m-d') );
+            $visitas = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }
+        return response()->json($visitas);
+
     }
 }

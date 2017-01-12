@@ -29,7 +29,8 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 
 .table tbody td:not(.horas):hover{
     cursor: pointer;
-    background-color: #b3c5ba;
+    /*background-color: #b3c5ba;*/
+    background-color: #e95b03;
 
     -webkit-transition: background-color 400ms linear;
     -moz-transition: background-color 400ms linear;
@@ -47,6 +48,9 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
     -ms-transition: background-color 400ms linear;
     transition: background-color 400ms linear;
 }
+#current_day{
+    display: none;
+}
 
 .table tbody td.green{
     background-color: #83f27e;
@@ -56,8 +60,33 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
     background-color: #4686ba;
 }
 
+.nodisponible{
+    /*background-color: #a6c7ff;*/
+    background-color: #a6a6a6;
+}
+
 #onemore{
     float: right;
+}
+#oneless{
+    float: left;
+}
+
+#datepicker{
+    width: 150px;
+    margin: 0 auto;
+    text-align: left;
+
+}
+#controles{
+    text-align: center;
+}
+.horas{
+    width: 90px;
+}
+.horas, th {
+    white-space: nowrap;
+    font-size: 12px;
 }
 
 label.error{
@@ -85,3 +114,5 @@ label.error{
     }
 
 }
+
+
