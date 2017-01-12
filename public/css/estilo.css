@@ -48,6 +48,56 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
     -ms-transition: background-color 400ms linear;
     transition: background-color 400ms linear;
 }
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/bgoverlay.png');
+    /*filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;*/
+    z-index: 10000;
+    text-align:center;
+}
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#overlay img {
+    display:block;
+    margin:auto;
+    top: 50%;
+    position:absolute;
+    text-align:center;
+    left: 50%;
+
+    -moz-opacity:1;
+    -khtml-opacity:1;
+
+    animation: blink 1.25s;
+    animation-iteration-count: infinite;
+}
+
+.text {
+    left: 0;
+    position:absolute;
+    text-align:center;
+    top: 30px;
+    width: 100%
+}
+
 #current_day{
     display: none;
 }
@@ -111,6 +161,10 @@ label.error{
     .ui-dialog .text:nth-of-type(6), .ui-dialog .text:nth-of-type(7){
         width: 50% !important;
         display:inline-table !important;
+    }
+    #overlay img {
+        left: 38%;
+        top: 45%;
     }
 
 }

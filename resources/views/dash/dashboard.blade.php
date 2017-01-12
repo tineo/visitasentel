@@ -164,6 +164,8 @@
         });
 
         $(function() {
+
+
             moment.locale("es");
 
             $('#current_day').text(moment().format('DD/MM/YYYY'));
@@ -206,6 +208,10 @@
 
                         $('.table tbody tr td').removeClass("nodisponible");
                     }).then(function () {
+
+                        var overlay = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
+                        overlay.appendTo(document.body);
+
                         $.ajax({ method: "GET", url: "/api/visitas/bydate",
                             data: {
                                 fecha: $('#current_day').text(),
@@ -232,7 +238,9 @@
 
                                 });
 
-                            })
+                            });
+
+                            overlay.remove();
 
                         }.bind(this));
                     }.bind(this));
