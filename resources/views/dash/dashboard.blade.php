@@ -458,8 +458,9 @@
 
                 }.bind(this))).then(function(){
                     $(event.target).prop('disabled', false);
+                    makeclickable($('td[data-day="d_'+new_m.format("DD_MM_YYYY")+'"]'));
                 });
-                makeclickable($('td[data-day="d_'+new_m.format("DD_MM_YYYY")+'"]'));
+
 
             });
 
@@ -512,8 +513,9 @@
 
                 }.bind(this))).then(function () {
                     $(event.target).prop('disabled', false);
+                    makeclickable($('td[data-day="d_'+past_day.format("DD_MM_YYYY")+'"]'));
                 });
-                makeclickable($('td[data-day="d_'+past_day.format("DD_MM_YYYY")+'"]'));
+
 
             });
 
