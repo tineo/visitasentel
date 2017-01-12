@@ -378,7 +378,8 @@
                 }
             });
 
-            $('#onemore').click(function () {
+            $('#onemore').click(function (event) {
+                $(event.target).prop('disabled', true);
 
                 var new_day = moment($('#current_day').text(),'DD/MM/YYYY').add(7,'days');
                 var next_day = moment($('#current_day').text(),'DD/MM/YYYY').add(1,'days');
@@ -436,6 +437,7 @@
                             if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
 
                         });
+                        $(event.target).prop('disabled', false);
 
                     })
 
@@ -445,8 +447,8 @@
 
             });
 
-            $('#oneless').click(function () {
-
+            $('#oneless').click(function (event) {
+                $(event.target).prop('disabled', true);
                 var past_day = moment($('#current_day').text(),'DD/MM/YYYY').subtract(1,'days');
                 $('#current_day').text(past_day.format('DD/MM/YYYY'));
                 $('#datepicker').val(past_day.format('DD/MM/YYYY'));
@@ -488,6 +490,7 @@
                             if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
 
                         });
+                        $(event.target).prop('disabled', false);
 
                     })
 
