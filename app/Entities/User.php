@@ -20,7 +20,7 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     public $id;
