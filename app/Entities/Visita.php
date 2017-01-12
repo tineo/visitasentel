@@ -8,6 +8,7 @@
 
 namespace App\Entities;
 use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  * @ORM\Table(name="visita")
@@ -54,11 +55,15 @@ class Visita
 
     private $visitante;
 
+    /** @ORM\OneToMany(targetEntity="Asistente", mappedBy="idvisita") */
+    private $visitantes;
+
 
 
     public function __construct()
     {
         $this->registerat = new \DateTime();
+        $this->visitantes = new ArrayCollection();
     }
 
     /**
@@ -236,6 +241,23 @@ class Visita
     {
         $this->registerby = $registerby;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getVisitantes()
+    {
+        return $this->visitantes;
+    }
+
+    /**
+     * @param mixed $visitantes
+     */
+    public function setVisitantes($visitantes)
+    {
+        $this->visitantes = $visitantes;
+    }
+
 
 
 }

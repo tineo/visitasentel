@@ -136,8 +136,8 @@
     <div id="dialog_adv" title="Advertencia">
         <p>Este horario no es disponible.</p>
     </div>
-
-
+    <!-- Initial overlay not by jquery-->
+    <div id="overlay"><img src="/images/entel.png"/></div>
 
 @endsection
 
@@ -165,7 +165,6 @@
 
         $(function() {
 
-
             moment.locale("es");
 
             $('#current_day').text(moment().format('DD/MM/YYYY'));
@@ -174,6 +173,7 @@
             var datePicker =  $( "#datepicker" ).datepicker({
                 dateFormat: 'dd/mm/yy',
                 onSelect: function(dateText, inst) {
+                    $(".dia-selected").removeClass("dia-selected");
                     $('#current_day').text( $('#datepicker').val() );
 
                     $.when().then(function(){
@@ -246,14 +246,6 @@
 
                         }.bind(this));
                     }.bind(this));
-
-
-
-
-
-
-
-
                 }
             });
 
@@ -280,8 +272,7 @@
                     $('#visitaform input[type="submit"]').attr("disable", "disable");
                 }
             });
-            var overlay0 = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
-            overlay0.appendTo(document.body);
+            var overlay0 = $('#overlay');
 
             $.ajax({ method: "GET", url: "/api/visitas/bydate",
                 data: {
@@ -515,7 +506,6 @@
                     $(event.target).prop('disabled', false);
                     makeclickable($('td[data-day="d_'+past_day.format("DD_MM_YYYY")+'"]'));
                 });
-
 
             });
 

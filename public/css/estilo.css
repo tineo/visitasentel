@@ -160,4 +160,21 @@ label.error{
 
 }
 
+.pagination{
+    margin: 0;
+    padding: 0;
+}
+.panel-pagination{
+    text-align: center;
+}
+.panel-pagination nav {
+    margin: 0;
+    padding: 0;
+    height: 36px;
+}
 
+.panel-pagination .input-group{
+  /*display: inline;*/
+    width: 70%;
+    margin: 0 auto 10px auto;
+}

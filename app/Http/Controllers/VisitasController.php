@@ -11,8 +11,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\EntityManager;
+
 
 class VisitasController extends Controller
 {
@@ -27,26 +29,44 @@ class VisitasController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $perpage = 10;
+        $page = 1;
 
+        if($request->get('p')) $page =$request->get('p');
 
-        $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v");
-        $data = $query->getResult();
+        if($request->get('dni')) {
+            $query = $this->em->createQuery("SELECT v FROM App\Entities\Visita v JOIN v.visitantes a WHERE a.dni = :dni ")
+                ->setFirstResult($perpage * ($page - 1))
+                ->setMaxResults($perpage);
+            $query->setParameter("dni", $request->get('dni'));
+
+        }else{
+            $query = $this->em->createQuery("SELECT v FROM App\Entities\Visita v")
+                ->setFirstResult($perpage * ($page - 1))
+                ->setMaxResults($perpage);
+        }
+        $data = new Paginator($query);
+
+        $c = count($data);
+
+        $pages = intval($c/$perpage);
+        if($c % $perpage > 0) $pages++;
 
         foreach ($data as $v){
             $query2 =$this->em->createQuery("SELECT a FROM App\Entities\Asistente a WHERE a.idvisita = :idvisita");
-            //echo $v->getIdVisita();
             $query2->setParameter("idvisita", $v->getIdVisita());
             $visitante = $query2->getResult();
-            //var_dump($visitante[0]->getNombre());
+
             $v->setVisitante($visitante[0]);
         }
 
-        return view('visitas.index', array("visitas" => $data));
+        return view('visitas.index', array("visitas" => $data, "count" => $c, "pages" => $pages));
     }
 
     /**
@@ -68,34 +88,7 @@ class VisitasController extends Controller
     public function store(Request $request)
     {
         //
-
-        /*
         $visita = new Visita();
-
-        $visita->setArea("1");
-        $visita->setContacto("1");
-        $visita->setEmpresa("1");
-        $visita->setFecha("1");
-        $visita->setHoraini("1");
-        $visita->setHorafin("1");
-        $visita->setMotivo("1");
-        $visita->setPiso("1");
-
-        $asistente =  new Asistente();
-        $asistente->setMotivo("1");
-        $asistente->setDni("135435");
-        $asistente->setEmail("1");
-        $asistente->setNombre("name1");
-        $asistente->setTipo("1");
-        $asistente->setIdvisita($visita);
-
-        $this->em->persist($visita);
-        $this->em->persist($asistente);
-        $this->em->flush();
-
-        */
-
-         $visita = new Visita();
 
         $visita->setArea($request->get('area'));
         $visita->setContacto($request->get('contacto'));
@@ -117,13 +110,11 @@ class VisitasController extends Controller
         $asistente->setTipo(1);
         $asistente->setIdvisita($visita);
 
-
         $this->em->persist($visita);
         $this->em->persist($asistente);
         $this->em->flush();
 
         return response()->json(array('code' => $visita->getIdvisita()));
-
 
     }
 
@@ -178,21 +169,43 @@ class VisitasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function me(Request $request){
+        //
+        $perpage = 10;
+        $page = 1;
 
-        $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.registerby = :userid");
-        $query->setParameter("userid", Auth::id());
-        $data = $query->getResult();
+        if($request->get('p')) $page =$request->get('p');
+
+        if($request->get('dni')) {
+            $query = $this->em->createQuery("SELECT v FROM App\Entities\Visita v JOIN v.visitantes a WHERE v.registerby = :userid AND a.dni = :dni ")
+                ->setFirstResult($perpage * ($page - 1))
+                ->setMaxResults($perpage);
+            $query->setParameter("dni", $request->get('dni'));
+            $query->setParameter("userid", Auth::id());
+
+        }else{
+            $query = $this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.registerby = :userid")
+                ->setFirstResult($perpage * ($page - 1))
+                ->setMaxResults($perpage);
+            $query->setParameter("userid", Auth::id());
+        }
+        $data = new Paginator($query);
+
+        $c = count($data);
+
+        $pages = intval($c/$perpage);
+        if($c % $perpage > 0) $pages++;
 
         foreach ($data as $v){
             $query2 =$this->em->createQuery("SELECT a FROM App\Entities\Asistente a WHERE a.idvisita = :idvisita");
-
             $query2->setParameter("idvisita", $v->getIdVisita());
+
             $visitante = $query2->getResult();
 
             $v->setVisitante($visitante[0]);
         }
 
-        return view('visitas.index', array("visitas" => $data));
+        return view('visitas.index', array("visitas" => $data, "count" => $c, "pages" => $pages));
+
     }
 
     /**
@@ -203,6 +216,7 @@ class VisitasController extends Controller
      */
     public function bydate(Request $request)
     {
+        //sleep(4);
         $offset = 1;
         if($request->get('fecha') !== null) $offset = $request->get('offset');
         //
