@@ -240,7 +240,9 @@
 
                             });
 
-                            overlay.remove();
+                            overlay.fadeOut( "slow", function() {
+                                $( this ).remove();
+                            });
 
                         }.bind(this));
                     }.bind(this));
@@ -278,6 +280,8 @@
                     $('#visitaform input[type="submit"]').attr("disable", "disable");
                 }
             });
+            var overlay0 = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
+            overlay0.appendTo(document.body);
 
             $.ajax({ method: "GET", url: "/api/visitas/bydate",
                 data: {
@@ -305,7 +309,10 @@
 
                     });
 
-                })
+                });
+                overlay0.fadeOut( "slow", function() {
+                    $( this ).remove();
+                });
 
             }.bind(this));
 
