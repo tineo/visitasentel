@@ -27,10 +27,10 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
     border: dotted #f2dede 1px;
 }
 
-.table tbody td:not(.horas):hover{
+.table tbody td:not(.horas, .table-list):hover{
     cursor: pointer;
     /*background-color: #b3c5ba;*/
-    background-color: #e95b03;
+    background-color: #ff8300;
 
     -webkit-transition: background-color 400ms linear;
     -moz-transition: background-color 400ms linear;
@@ -92,6 +92,17 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 
 .table tbody td.green{
     background-color: #83f27e;
+}
+
+
+.table-list tbody tr:hover{
+    cursor: pointer;
+    background-color: #ffe16d;
+    -webkit-transition: background-color 350ms linear;
+    -moz-transition: background-color 350ms linear;
+    -o-transition: background-color 350ms linear;
+    -ms-transition: background-color 350ms linear;
+    transition: background-color 350ms linear;
 }
 
 .dia-selected{
@@ -177,4 +188,92 @@ label.error{
   /*display: inline;*/
     width: 70%;
     margin: 0 auto 10px auto;
+}
+
+.panel-body h3{
+    padding: 15px 0;
+    margin: 0;
+}
+
+.panel-body .btn-group{
+    margin: 15px 0;
+}
+
+.ui-widget-header{
+    background-color: #005F9F;
+    color: #fff;
+}
+
+.ui-widget-header .ui-button{
+    background-color: #fff !important;
+    color: #005F9F;
+}
+.ui-button:active{
+    border: solid 1px #003353;
+    background-color: #005F9F;
+}
+
+.ui-datepicker-prev:hover, .ui-datepicker-next:hover{
+    background-color: #0068ab;
+    border: solid 1px #005F9F;
+    margin-top: 1px;
+    margin-right: 1px;
+}
+
+body{
+    background-color: #005F9F;
+}
+
+html, body {
+    height: 100%;
+}
+
+#wrap {
+    min-height: 100%;
+}
+
+#main {
+    overflow:auto;
+    padding-bottom:50px; /* this needs to be bigger than footer height*/
+    padding-top: 70px;
+}
+
+.footer {
+    position: relative;
+    margin-top: -50px; /* negative value of footer height */
+    height: 50px;
+    clear:both;
+    padding-top:20px;
+    color: #fff;
+}
+
+.footer .container-footer {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.footer .col-md-12{
+    /*background-color: #fff;*/
+    /*height: 50px;
+    padding-top: 15px;*/
+}
+
+@media (min-width: 768px) {
+    .container-footer {
+        width: 720px;
+    }
+}
+
+@media (min-width: 992px){
+    .container-footer {
+        width: 940px;
+    }
+}
+
+@media (min-width: 1200px){
+    .container-footer {
+        width: 1140px;
+    }
 }

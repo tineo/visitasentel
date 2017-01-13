@@ -92,7 +92,7 @@ class VisitasController extends Controller
 
         $visita->setArea($request->get('area'));
         $visita->setContacto($request->get('contacto'));
-        $visita->setEmpresa($request->get('empresa'));
+
 
         $visita->setFecha(\DateTime::createFromFormat('d/m/Y', $request->get('fecha')));
         $visita->setHoraini(\DateTime::createFromFormat('H:i', $request->get('horaini')));
@@ -107,6 +107,7 @@ class VisitasController extends Controller
         $asistente->setDni($request->get('dni'));
         $asistente->setEmail($request->get('email'));
         $asistente->setNombre($request->get('nombre'));
+        $asistente->setEmpresa($request->get('empresa'));
         $asistente->setTipo(1);
         $asistente->setIdvisita($visita);
 
@@ -127,6 +128,14 @@ class VisitasController extends Controller
     public function show($id)
     {
         //
+
+        $query = $this->em->createQuery("SELECT v FROM App\Entities\Visita v JOIN v.visitantes a
+                                          WHERE v.idvisita = :idvisita");
+        $query->setParameter("idvisita", $id);
+        $visita = $query->getOneOrNullResult();
+        //var_dump($visita->getVisitantes()->get(0)->getNombre());
+
+        return view('visitas.show', array("visita" => $visita));
     }
 
     /**

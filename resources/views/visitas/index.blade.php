@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div  id="main" class="container">
 
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Titulo</div>
+                    <div class="panel-heading">Lista de visitas</div>
                     <div class="panel-heading panel-pagination">
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-sm-5 col-xs-12">
                                 <form action="/visitas">
                                      <div class="input-group">
                                          <span class="input-group-addon" id="basic-addon3">DNI</span>
@@ -24,7 +24,7 @@
                                      </div>
                                 </form>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 col-sm-7 col-xs-12">
 
                                 <?php
                                     list(, $action) = explode('@', Route::getCurrentRoute()->getActionName());
@@ -82,7 +82,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-list">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -96,15 +96,16 @@
                                 </thead>
                                 <tbody>
                                 @foreach ($visitas as $visita)
-                                    <tr>
-                                        <td> {{ $visita->getIdvisita() }} </td>
-                                        <td> {{ $visita->getVisitante()->getNombre() }} </td>
-                                        <td> {{ $visita->getVisitante()->getDNI() }} </td>
-                                        <td> {{ $visita->getContacto() }} </td>
-                                        <td> {{ $visita->getPiso() }} </td>
-                                        <td> {{ $visita->getFecha()->format('d/m/Y') }} - {{ $visita->getHoraini()->format('H:i') }}  / {{ $visita->getHorafin()->format('H:i') }} </td>
-
-                                    </tr>
+                                    <a href="#">
+                                        <tr class='visita-row' data-href='{{ action("VisitasController@show",[   'id' => $visita->getIdvisita() ] )}}'>
+                                            <td> {{ $visita->getIdvisita() }} </td>
+                                            <td> {{ $visita->getVisitante()->getNombre() }} </td>
+                                            <td> {{ $visita->getVisitante()->getDNI() }} </td>
+                                            <td> {{ $visita->getContacto() }} </td>
+                                            <td> {{ $visita->getPiso() }} </td>
+                                            <td> {{ $visita->getFecha()->format('d/m/Y') }} - {{ $visita->getHoraini()->format('H:i') }}  / {{ $visita->getHorafin()->format('H:i') }} </td>
+                                        </tr>
+                                    </a>
                                 @endforeach
                                 </tbody>
                             </table>
@@ -117,5 +118,12 @@
 @endsection
 
 @section('js')
+<script type="text/javascript">
 
+    $(document).ready(function($) {
+        $(".visita-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
 @endsection

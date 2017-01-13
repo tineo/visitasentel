@@ -29,6 +29,9 @@ class Asistente
     /** @ORM\Column(type="string") */
     private $dni;
 
+    /** @ORM\Column(type="string", nullable=true) */
+    private $empresa;
+
     /** @ORM\Column(type="string") */
     private $email;
 
@@ -98,6 +101,22 @@ class Asistente
     public function setDni($dni)
     {
         $this->dni = $dni;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * @param mixed $empresa
+     */
+    public function setEmpresa($empresa)
+    {
+        $this->empresa = $empresa;
     }
 
     /**

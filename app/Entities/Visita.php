@@ -33,9 +33,6 @@ class Visita
     private $horafin;
 
     /** @ORM\Column(type="string", nullable=true) */
-    private $empresa;
-
-    /** @ORM\Column(type="string", nullable=true) */
     private $motivo;
 
     /** @ORM\Column(type="string", nullable=true) */
@@ -55,7 +52,9 @@ class Visita
 
     private $visitante;
 
-    /** @ORM\OneToMany(targetEntity="Asistente", mappedBy="idvisita") */
+    /** @ORM\OneToMany(targetEntity="Asistente", mappedBy="idvisita")
+     *  @ORM\OrderBy({"tipo" = "DESC"})
+     */
     private $visitantes;
 
 
@@ -130,21 +129,6 @@ class Visita
         $this->horafin = $horafin;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmpresa()
-    {
-        return $this->empresa;
-    }
-
-    /**
-     * @param mixed $empresa
-     */
-    public function setEmpresa($empresa)
-    {
-        $this->empresa = $empresa;
-    }
 
     /**
      * @return mixed

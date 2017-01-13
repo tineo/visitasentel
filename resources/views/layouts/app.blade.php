@@ -47,7 +47,7 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-static-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
 
@@ -68,9 +68,9 @@
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                {{--<ul class="nav navbar-nav">
+                <!--<ul class="nav navbar-nav">
                     {{ getHostByName(getHostName()) }}
-                </ul>--}}
+                </ul>-->
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -107,9 +107,18 @@
             </div>
         </div>
     </nav>
-
+    <div id="wrap">
     @yield('content')
-
+    </div>
+    <footer class="footer">
+        <div class="container-footer">
+            <div class="row">
+                <div class="col-md-12">
+                    2016 - Entel. Todos los derechos de reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
     <!-- Scripts -->
 
 
