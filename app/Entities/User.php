@@ -19,7 +19,6 @@ use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
  * @ORM\Entity
  * @ORM\Table(name="users")
  */
-//use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\CanResetPassword, HasRolesContract
 {
@@ -35,25 +34,18 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
      * @ORM\Column(type="integer")
      */
     public $id;
-
     /**
      * @ORM\Column(type="string")
      */
     public $name;
-
     /**
      * @ORM\Column(type="string")
      */
     public $email;
     /**
-     * @ORM\Column(type="string", nullable=true )
+     * @ORM\Column(type="string", nullable=false )
      */
     public $codigo;
-
-    /**
-    // * @ORM\Column(type="string")
-     */
-    //protected $password;
 
     /** @ORM\Column(type="datetime", nullable=false ) */
     private $created_at;
@@ -94,6 +86,25 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
         $this->updated_at = new \DateTime();
 
     }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'codigo'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
 
     /**
      * @return mixed
@@ -206,29 +217,6 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
     {
         $this->codigo = $codigo;
     }
-
-
-
-
-
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'codigo'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
 
 
     /**

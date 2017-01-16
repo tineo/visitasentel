@@ -232,7 +232,7 @@ return [
         'Registry'      => LaravelDoctrine\ORM\Facades\Registry::class,
         'Doctrine'      => LaravelDoctrine\ORM\Facades\Doctrine::class,
 
-        'users'      => App\Entities\User::class,
+        'Users'      => App\Entities\User::class,
 
     ],
 
