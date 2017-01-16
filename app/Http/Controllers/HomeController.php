@@ -31,9 +31,10 @@ class HomeController extends Controller
         $em = app('Doctrine\ORM\EntityManagerInterface');
         $roles = array();
 
-        $query0 = $em->createQuery("SELECT r FROM App\Entities\User r WHERE r.email = :email");
+        $query0 = $em->createQuery("SELECT r FROM App\Entities\User u WHERE u.email = :email");
         $query0->setParameter("email", "cesar@tineo.mobi");
         $user0 = $query0->getOneOrNullResult();
+
         if($user0 == null) {
 
             $query1 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
@@ -78,10 +79,9 @@ class HomeController extends Controller
             $user->setCodigo("99666567");
             $em->flush();
 
-            $query = $em->createQuery("SELECT r FROM App\Entities\Role r ");
-
-            $query->setParameter("id", $role);
-            $roles = $query->getResult();
+            $queryz = $em->createQuery("SELECT r FROM App\Entities\Role r ");
+            $queryz->setParameter("id", $role);
+            $roles = $queryz->getResult();
 
             foreach ($roles as $role) {
                 $user->getRoles()->add($role);
