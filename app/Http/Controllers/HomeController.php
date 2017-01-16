@@ -37,7 +37,7 @@ class HomeController extends Controller
 
         if($user0 == null) {
 
-            /*$query1 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
+            $query1 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
             $query1->setParameter("name", "admin");
             $role = $query1->getOneOrNullResult();
             if ($role == null) {
@@ -91,7 +91,7 @@ class HomeController extends Controller
 
             $em->flush();
 
-            */
+
             return view('home', array("roles" => $roles));
         }else{
             abort(404);
