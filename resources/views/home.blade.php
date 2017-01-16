@@ -10,7 +10,7 @@
                 <div class="panel-body">
                     <ul>
                     @foreach($roles as $role)
-                        <li>{{ $role }}</li>
+                        <li>{{ $role->getName() }}</li>
                     @endforeach
                     </ul>
                 </div>
