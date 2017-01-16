@@ -77,7 +77,7 @@ class HomeController extends Controller
             $em->flush();
 
             $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
-            $user->setCodigo("99666567");
+            $user->setCodigo("996666567");
 
 
             $queryz = $em->createQuery("SELECT r FROM App\Entities\Role r ");
@@ -108,11 +108,12 @@ class HomeController extends Controller
     {
         //
         $em = app('Doctrine\ORM\EntityManagerInterface');
-        $query = $em->createQuery("SELECT u FROM App\Entities\User u WHERE u.codigo = ?1");
-        $query->setParameter(1, $hash);
-        $user = $query->getResult(Query::HYDRATE_OBJECT);
+        $query = $em->createQuery("SELECT u FROM App\Entities\User u WHERE u.codigo = :codigo");
+        //$query = $em->createQuery("SELECT u FROM App\Entities\User u");
+        $query->setParameter("codigo", "".$hash);
+        $user = $query->getResult();
 
-        return $user;
+        //return $user;
 
         if(count($user) > 0) Auth::login($user[0]);
 
