@@ -76,7 +76,7 @@ class HomeController extends Controller
 
             //$em->flush();
 
-            $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
+            /*$user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
             $user->setCodigo("99666567");
 
 
@@ -88,7 +88,7 @@ class HomeController extends Controller
                 $user->getRoles()->add($role);
             }
             $em->persist($user);
-
+            */
 
             $em->flush();
 
