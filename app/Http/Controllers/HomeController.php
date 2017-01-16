@@ -74,10 +74,11 @@ class HomeController extends Controller
                 $roles[] = "clerk";
             }
 
-            $em = app('Doctrine\ORM\EntityManagerInterface');
+            $em->flush();
+
             $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
             $user->setCodigo("99666567");
-            $em->flush();
+
 
             $queryz = $em->createQuery("SELECT r FROM App\Entities\Role r ");
             $queryz->setParameter("id", $role);
