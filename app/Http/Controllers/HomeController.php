@@ -74,21 +74,20 @@ class HomeController extends Controller
                 $roles[] = "clerk";
             }
 
-            //$em->flush();
+            $em->flush();
 
-            /*$user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
+            $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
             $user->setCodigo("99666567");
 
 
             $queryz = $em->createQuery("SELECT r FROM App\Entities\Role r ");
-            $queryz->setParameter("id", $role);
             $roles = $queryz->getResult();
 
             foreach ($roles as $role) {
                 $user->getRoles()->add($role);
             }
             $em->persist($user);
-            */
+
 
             $em->flush();
 
