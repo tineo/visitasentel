@@ -31,7 +31,7 @@ class HomeController extends Controller
         $em = app('Doctrine\ORM\EntityManagerInterface');
         $roles = array();
 
-        $query0 = $em->createQuery("SELECT r FROM App\Entities\User u WHERE u.email = :email");
+        $query0 = $em->createQuery("SELECT u FROM App\Entities\User u WHERE u.email = :email");
         $query0->setParameter("email", "cesar@tineo.mobi");
         $user0 = $query0->getOneOrNullResult();
 
