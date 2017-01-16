@@ -32,12 +32,12 @@ class HomeController extends Controller
         $roles = array();
 
         $query0 = $em->createQuery("SELECT u FROM App\Entities\User u WHERE u.email = :email");
-        $query0->setParameter("email", "cesar@tineo.mobi");
+        $query0->setParameter("email", 'cesar@tineo.mobi');
         $user0 = $query0->getOneOrNullResult();
 
         if($user0 == null) {
 
-            $query1 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
+            /*$query1 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
             $query1->setParameter("name", "admin");
             $role = $query1->getOneOrNullResult();
             if ($role == null) {
@@ -91,7 +91,7 @@ class HomeController extends Controller
 
             $em->flush();
 
-
+            */
             return view('home', array("roles" => $roles));
         }else{
             abort(404);
