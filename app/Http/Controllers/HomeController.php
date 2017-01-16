@@ -74,7 +74,7 @@ class HomeController extends Controller
                 $roles[] = "clerk";
             }
 
-            $em->flush();
+            //$em->flush();
 
             $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
             $user->setCodigo("99666567");
