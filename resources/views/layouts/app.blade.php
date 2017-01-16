@@ -77,12 +77,28 @@
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">Iniciar sesion</a></li>
-                        <li><a href="{{ url('/register') }}">Registrarse</a></li>
+
+                        {{--<li><a href="{{ url('/register') }}">Registrarse</a></li>--}}
+
                     @else
+                        @if(Auth::user()->hasRoleByName(['user','admin']))
                         <li><a href="{{ url('/dashboard') }}">Registrar visita</a></li>
+                        @endif
+
+                        @if(Auth::user()->hasRoleByName(['admin']))
                         <li><a href="{{ url('/users') }}">Usuarios</a></li>
+                        @endif
+
+                        @if(Auth::user()->hasRoleByName(['clerk','admin']))
                         <li><a href="{{ url('/visitas/') }}">Lista de visitas</a></li>
+                        @endif
+
+                        @if(Auth::user()->hasRoleByName(['user','admin']))
                         <li><a href="{{ url('/visitas/me') }}">Mis visitas</a></li>
+                        @endif
+
+
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ Auth::user()->name }} <span class="caret"></span>

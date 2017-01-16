@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User;
+use Doctrine\ORM\Query;
+
+use App\Entities\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,7 +18,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -23,6 +28,67 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $em = app('Doctrine\ORM\EntityManagerInterface');
+        $roles = array();
+        $query1 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
+        $query1->setParameter("name", "admin");
+        $role = $query1->getOneOrNullResult();
+        if($role == null){
+            $r1 = new Role();
+            $r1->setName("admin");
+            $r1->setDescription("Administrador");
+            $em->persist($r1);
+
+            $roles[] = "admin";
+        }
+
+        $query2 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
+        $query2->setParameter("name", "user");
+        $role2 = $query2->getOneOrNullResult();
+        if($role2 == null){
+            $r2 = new Role();
+            $r2->setName("user");
+            $r2->setDescription("Usuario");
+            $em->persist($r2);
+
+            $roles[] = "user";
+        }
+
+
+        $query3 = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.name = :name");
+        $query3->setParameter("name", "clerk");
+        $role3 = $query3->getOneOrNullResult();
+        if($role3 == null){
+            $r3 = new Role();
+            $r3->setName("clerk");
+            $r3->setDescription("Recepcionista");
+            $em->persist($r3);
+
+            $roles[] = "clerk";
+        }
+        $em->flush();
+
+        return view('home', array("roles" => $roles));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $hash
+     * @return \Illuminate\Http\Response
+     */
+    public function pickup($hash)
+    {
+        //
+        $em = app('Doctrine\ORM\EntityManagerInterface');
+        $query = $em->createQuery("SELECT u FROM App\Entities\User u WHERE u.codigo = ?1");
+        $query->setParameter(1, $hash);
+        $user = $query->getResult(Query::HYDRATE_OBJECT);
+
+        if(count($user) > 0) Auth::login($user[0]);
+
+        return  redirect()->intended('dashboard');
+
+
     }
 }

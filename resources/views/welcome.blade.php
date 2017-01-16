@@ -72,10 +72,10 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
+            @if (!Auth::check())
                 <div class="top-right links">
                     <a href="{{ url('/login') }}">Iniciar sesion</a>
-                    <a href="{{ url('/register') }}">Registrarse</a>
+                    {{--<a href="{{ url('/register') }}">Registrarse</a>--}}
                 </div>
             @endif
 

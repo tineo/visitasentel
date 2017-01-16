@@ -194,6 +194,10 @@ label.error{
     padding: 15px 0;
     margin: 0;
 }
+.panel-heading h3{
+    padding: 5px 0;
+    margin: 0;
+}
 
 .panel-body .btn-group{
     margin: 15px 0;

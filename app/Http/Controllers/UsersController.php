@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use Illuminate\Http\Request;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\EntityManager;
 
 use App\Http\Requests;
@@ -19,6 +20,7 @@ class UsersController extends Controller
 
     public function __construct(EntityManagerInterface $em)
     {
+        $this->middleware('auth');
         $this->em = $em;
     }
 
@@ -29,14 +31,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
-        //$tienda = new User();
-
-        //$tienda->setName("prueba2");
-        //$tienda->setState("ok");
-        //$this->em->persist($tienda);
-        //$this->em->flush();
-
+        if(!Auth::user()->hasRoleByName(['user','admin'])){
+            return redirect('/visitas');
+        }
         $query =$this->em->createQuery("SELECT u FROM App\Entities\User u");
         $data = $query->getResult();
         return view('users.index', array("users" => $data));

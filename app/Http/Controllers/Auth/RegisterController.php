@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 //use App\User;
+use App\Entities\Role;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Input;
 
 use App\Entities\User;
 
@@ -30,7 +33,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -39,7 +42,20 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        //$this->middleware('guest');
+
+        $this->middleware('auth');
+    }
+
+    public function showRegistrationForm()
+    {
+        if(!Auth::user()->hasRoleByName(['admin'])){
+            return redirect('/');
+        }
+        $em = app('Doctrine\ORM\EntityManagerInterface');
+        $query = $em->createQuery("SELECT r FROM App\Entities\Role r");
+        $roles = $query->getResult();
+        return view('auth.register', array("roles" => $roles));
     }
 
     /**
@@ -68,8 +84,21 @@ class RegisterController extends Controller
         $em = app('Doctrine\ORM\EntityManagerInterface');
         $user =  new User($data['name'],$data['email'],bcrypt($data['password']));
 
+
+        $roles_checked = Input::get('roles');
+
+        foreach ($roles_checked as $role){
+            $query = $em->createQuery("SELECT r FROM App\Entities\Role r WHERE r.id = :id");
+
+            $query->setParameter("id", $role);
+            $role = $query->getOneOrNullResult();
+            $user->getRoles()->add($role);
+        }
+
+        //$user->addRole("admin");
         $em->persist($user);
         $em->flush();
+
 
         /*return User::create([
             'name' => $data['name'],

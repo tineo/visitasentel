@@ -65,6 +65,39 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="password-confirm" class="col-md-4 control-label">Codigo de autologin</label>
+
+                            <div class="col-md-6">
+                                <input id="code_autologin" type="text" class="form-control" name="code_autologin" required>
+
+                                @if ($errors->has('code_autologin'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('code_autologin') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password-confirm" class="col-md-4 control-label">Roles</label>
+
+                            <div class="col-md-6">
+
+                                @foreach($roles as $role)
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="roles[]" value="{{ $role->getId() }}">
+                                        {{ $role->getDescription() }}
+                                    </label>
+                                </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+
+
+
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">

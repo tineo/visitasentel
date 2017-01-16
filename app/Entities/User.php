@@ -3,8 +3,15 @@
 namespace App\Entities;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Notifications\Notifiable;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
+
+//use LaravelDoctrine\ACL\Contracts\Role ;
+use App\Entities\Role as Role;
+use LaravelDoctrine\ACL\Roles\HasRoles;
+use LaravelDoctrine\ACL\Mappings as ACL;
+use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 
 //use Illuminate\Contracts\Auth\Authenticatable;
 
@@ -14,9 +21,13 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 //use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\CanResetPassword
+class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\CanResetPassword, HasRolesContract
 {
     use \LaravelDoctrine\ORM\Auth\Authenticatable;
+
+
+    use HasRoles;
+    use Notifiable;
 
     /**
      * @ORM\Id
@@ -34,6 +45,10 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
      * @ORM\Column(type="string")
      */
     public $email;
+    /**
+     * @ORM\Column(type="string", nullable=true )
+     */
+    public $codigo;
 
     /**
     // * @ORM\Column(type="string")
@@ -44,7 +59,20 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
     private $created_at;
     /** @ORM\Column(type="datetime", nullable=false ) */
     private $updated_at;
+    /**
+     * @ACL\HasRoles()
+     * @var \Doctrine\Common\Collections\ArrayCollection|\LaravelDoctrine\ACL\Contracts\Role[]
+     */
+    protected $roles;
 
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+    }
+    public function getRoles()
+    {
+        return $this->roles;
+    }
 
 
     /**
@@ -55,6 +83,8 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
      */
     public function __construct($name, $email, $password)
     {
+
+        $this->roles = new ArrayCollection();
 
         $this->name = $name;
         $this->email = $email;
@@ -161,11 +191,26 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
         $this->created_at = $created_at;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param mixed $codigo
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+    }
 
 
 
 
-    use Notifiable;
+
 
     /**
      * The attributes that are mass assignable.
@@ -207,4 +252,7 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
     {
         // TODO: Implement sendPasswordResetNotification() method.
     }
+
+
+
 }

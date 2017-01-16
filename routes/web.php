@@ -14,9 +14,13 @@ use \Illuminate\Support\Facades\Mail;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    if(Auth::check()){
+        return redirect('dashboard');
+    }else{
+        return view('welcome');
+    }
 });
-
+/*
 Route::get('/sendmail', function () {
     $data = array(
         'name' => "Learning Laravel",
@@ -32,19 +36,16 @@ Route::get('/sendmail', function () {
 
     return "Your email has been sent successfully";
 });
-
-//Auth::routes();
-
-Route::get('/home', 'HomeController@index');
-
-//Auth::routes();
+*/
 
 
 Route::resource('dashboard', 'DashController',
     ['only' => ['index', 'store', 'update', 'destroy', 'show']]);
 
 
-Route::get('dashboard/pickup/{hash}', ['uses' => 'DashController@pickup', 'as' => 'dashboard.pickup']);
+Route::get('/install', 'HomeController@index');
+
+Route::get('home/{hash}', ['uses' => 'HomeController@pickup', 'as' => 'home.pickup']);
 //Route::get('dashboard', 'DashController@pickup');
 
 
@@ -65,3 +66,4 @@ Route::resource('visitas', 'VisitasController', ['only' => [
 
 
 Auth::routes();
+

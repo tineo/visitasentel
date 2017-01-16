@@ -167,6 +167,7 @@ return [
          * Package Service Providers...
          */
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        LaravelDoctrine\ACL\AclServiceProvider::class,
 
         //
 

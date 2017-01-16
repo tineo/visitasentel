@@ -20,7 +20,11 @@ class DashController extends Controller
 
     public function __construct(EntityManagerInterface $em)
     {
+
+        //$this->middleware('auth');
+        $this->middleware('auth');
         $this->em = $em;
+
     }
     /**
      * Display a listing of the resource.
@@ -30,6 +34,11 @@ class DashController extends Controller
     public function index()
     {
         //
+
+        if(!Auth::user()->hasRoleByName(['user','admin'])){
+            return redirect('/visitas');
+        }
+
         return view('dash.dashboard', array("tracks" => null));
     }
 
@@ -67,34 +76,7 @@ class DashController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $hash
-     * @return \Illuminate\Http\Response
-     */
-    public function pickup($hash)
-    {
-        //
 
-        $query =$this->em->createQuery("SELECT u FROM App\Entities\User u WHERE u.email = ?1");
-        $query->setParameter(1, "itsudatte01@gmail.com");
-        $user = $query->getResult(Query::HYDRATE_OBJECT);
-        echo "<pre>";
-
-
-        var_dump(Auth::check());
-        Auth::login($user[0]);
-        //var_dump(Auth::loginUsingId($user[0]->getId(), true));
-        var_dump(Auth::check());
-        //Auth::logout();
-        //Session::save();
-        echo "</pre>";
-        //return 1;
-        return  redirect()->intended('home');
-
-
-    }
 
     /**
      * Show the form for editing the specified resource.

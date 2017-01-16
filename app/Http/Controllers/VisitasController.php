@@ -23,6 +23,7 @@ class VisitasController extends Controller
 
     public function __construct(EntityManagerInterface $em)
     {
+        $this->middleware('auth');
         $this->em = $em;
     }
 
@@ -34,6 +35,9 @@ class VisitasController extends Controller
      */
     public function index(Request $request)
     {
+        if(!Auth::user()->hasRoleByName(['clerk','admin'])){
+            return redirect('/dashboard');
+        }
         //
         $perpage = 10;
         $page = 1;
@@ -54,6 +58,7 @@ class VisitasController extends Controller
         $data = new Paginator($query);
 
         $c = count($data);
+
 
         $pages = intval($c/$perpage);
         if($c % $perpage > 0) $pages++;
@@ -133,6 +138,8 @@ class VisitasController extends Controller
                                           WHERE v.idvisita = :idvisita");
         $query->setParameter("idvisita", $id);
         $visita = $query->getOneOrNullResult();
+
+        if($visita == null) abort(404);
         //var_dump($visita->getVisitantes()->get(0)->getNombre());
 
         return view('visitas.show', array("visita" => $visita));
@@ -178,6 +185,9 @@ class VisitasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function me(Request $request){
+        if(!Auth::user()->hasRoleByName(['user','admin'])){
+            return redirect('/visitas');
+        }
         //
         $perpage = 10;
         $page = 1;
@@ -230,15 +240,17 @@ class VisitasController extends Controller
         if($request->get('fecha') !== null) $offset = $request->get('offset');
         //
         if($offset < 2 ){
-            $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.fecha = :fecha");
+            $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.fecha = :fecha AND v.registerby = :userid");
             $query->setParameter("fecha", \DateTime::createFromFormat('d/m/Y', $request->get('fecha'))->format('Y-m-d') );
+            $query->setParameter("userid", Auth::id() );
             $visitas = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }else{
             $fecha = \DateTime::createFromFormat('d/m/Y', $request->get('fecha'));
             $fechalimit = \DateTime::createFromFormat('d/m/Y', $request->get('fecha'))->modify('+'.($offset-1).' day');
-            $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.fecha BETWEEN :fecha1 AND :fecha2");
+            $query =$this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.registerby = :userid AND (v.fecha BETWEEN :fecha1 AND :fecha2)");
             $query->setParameter("fecha1", $fecha->format('Y-m-d') );
             $query->setParameter("fecha2", $fechalimit->format('Y-m-d') );
+            $query->setParameter("userid", Auth::id() );
             $visitas = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return response()->json($visitas);
