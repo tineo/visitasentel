@@ -112,6 +112,8 @@ class HomeController extends Controller
         $query->setParameter(1, $hash);
         $user = $query->getResult(Query::HYDRATE_OBJECT);
 
+        return $user;
+
         if(count($user) > 0) Auth::login($user[0]);
 
         return  redirect()->intended('dashboard');
