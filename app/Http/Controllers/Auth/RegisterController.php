@@ -83,6 +83,7 @@ class RegisterController extends Controller
     {
         $em = app('Doctrine\ORM\EntityManagerInterface');
         $user =  new User($data['name'],$data['email'],bcrypt($data['password']));
+        $user->setCodigo(Input::get('code_autologin'));
 
 
         $roles_checked = Input::get('roles');
