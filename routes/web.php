@@ -15,11 +15,11 @@ use \Illuminate\Support\Facades\Mail;
 
 
 Route::get('/', function () {
-    //if(Auth::check()){
-    //    return redirect('dashboard');
-    //}else{
+    if(Auth::check()){
+        return redirect('dashboard');
+    }else{
         return view('welcome');
-    //}
+    }
 });
 /*
 Route::get('/sendmail', function () {
