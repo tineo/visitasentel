@@ -32,7 +32,7 @@ class HomeController extends Controller
         $roles = array();
 
         $query0 = $em->createQuery("SELECT r FROM App\Entities\User r WHERE r.email = :email");
-        $query0->setParameter("name", "admin");
+        $query0->setParameter("email", "cesar@tineo.mobi");
         $user0 = $query0->getOneOrNullResult();
         if($user0 == null) {
 
@@ -75,7 +75,7 @@ class HomeController extends Controller
 
             $em = app('Doctrine\ORM\EntityManagerInterface');
             $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
-
+            $user->setCodigo("99666567");
             $em->flush();
 
             $query = $em->createQuery("SELECT r FROM App\Entities\Role r ");
