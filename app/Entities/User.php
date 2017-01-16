@@ -218,7 +218,7 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'codigo'
     ];
 
     /**
