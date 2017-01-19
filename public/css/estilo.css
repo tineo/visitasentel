@@ -281,3 +281,15 @@ html, body {
         width: 1140px;
     }
 }
+
+#dialog_new{
+    display: none;
+}
+
+#noconfirmar, #noanular{
+    cursor: not-allowed;
+}
+
+.delete-asistente:hover{
+    cursor: pointer;
+}

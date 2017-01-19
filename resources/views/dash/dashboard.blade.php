@@ -18,13 +18,18 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Visitas programadas <span id="current_day"></span></div>
+                    <div class="panel-heading">Visitas programadas
+                        <span id="current_day"></span>
+                        <span class="sedespan"><b>{{ $sede->getNombre() }}</b></span>
+                        <span>({{$sede->getHoraini()->format('H:i')}} - {{$sede->getHorafin()->format('H:i')}})</span>
+                    </div>
                     <div class="panel-heading" id="controles">
                         <button class="ui-button ui-widget ui-corner-all" id="oneless"><<</button>
                         <input type="text" id="datepicker">
                         <button class="ui-button ui-widget ui-corner-all" id="onemore">>></button>
 
                     </div>
+
                     <div class="panel-body">
 
                         <div class="table-responsive">
@@ -35,6 +40,7 @@
                             setlocale(LC_ALL,"es_ES");
                             date_default_timezone_set('America/Lima');
                             $now = new \DateTime();
+
 
                                 $days = array( "Monday" => "Lunes",
                                         "Tuesday" => "Martes",
@@ -59,14 +65,21 @@
                             </thead>
                             <tbody>
 
-                            <?php $now = new \DateTime();
-                            $now->setTime(8,0);
-                            $then = new \DateTime();
-                            $then->setTime(8,0);
+                            <?php
+                            //$now = \DateTime::createFromFormat('H:i', $sede["horaini"]);
+                            $now = \DateTime::createFromFormat('H:i', $sede->getHoraini()->format('H:i'));
+                            //$then = \DateTime::createFromFormat('H:i', $sede["horaini"]);
+                            $then = \DateTime::createFromFormat('H:i', $sede->getHoraini()->format('H:i'));
+                            //$last = \DateTime::createFromFormat('H:i', $sede["horafin"]);
+                            $last = \DateTime::createFromFormat('H:i', $sede->getHorafin()->format('H:i'));
+                            //$now = new \DateTime();
+                            //$now->setTime(8,0);
+                            //$then = new \DateTime();
+                            //$then->setTime(8,0);
                             $then->add(new \DateInterval('PT30M'));
                             ?>
 
-                            @for ($i = 0; $i < 22; $i++)
+                            @for ($i = 0; $now < $last; $i++)
                                 <tr>
 
                                     <td class="horas">{{ $now->format('H:i') }} - {{ $then->format('H:i') }}</td>
@@ -76,7 +89,7 @@
                                                 data-day="{{ "d_".$now->format('d_m_Y') }}"
                                                 data-hour="{{ "d_".$now->format('H_i') }}"
                                                 data-hourfin="{{ "d_".$then->format('H_i') }}"
-                                        >{{-- $now->format('d/m/Y H:i') --}}</td>
+                                        ></td>
                                         <?php $now->modify('+1 day')?>
                                     @endfor
                                     <?php $now->modify('-7 day')?>
@@ -101,6 +114,18 @@
     </style>
 
     <div id="dialog_new" title="Visitas" >
+        @if( (\Illuminate\Support\Facades\Input::get("postpone")) != null )
+            <h5>Fecha y hora actual de la visita</h5>
+            <div>
+                <span>{{ $visita->getFecha()->format('d/m/Y') }} </span>
+                <span>{{ $visita->getHoraini()->format('H:i') }} / {{ $visita->getHorafin()->format('H:i') }}</span>
+            </div>
+            <h5>Fecha y hora nueva de la visita</h5>
+            <input type="hidden" name="fecha" id="fecha" value="">
+            <input type="hidden" name="horaini" id="horaini" value="">
+            <input type="hidden" name="horafin" id="horafin" value="">
+            <div><span id="newfecha"></span> <span id="newtiempo"></span></div>
+        @else
         <p class="validateTips"></p>
         <h6>Registro de visitas</h6>
         <form id="visitaform">
@@ -111,6 +136,8 @@
                 <input type="text" name="dni" id="dni" value="" class="text ui-widget-content ui-corner-all">
                 <label for="empresa">Empresa de visita</label>
                 <input type="text" name="empresa" id="empresa" value="" class="text ui-widget-content ui-corner-all">
+                <label for="empresa">Email de visita</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all">
                 <label for="motivo">Motivo</label>
                 <input type="text" name="motivo" id="motivo" value="" class="text ui-widget-content ui-corner-all">
                 <label for="contacto">Contacto Entel</label>
@@ -121,15 +148,16 @@
 
                 <label for="tiempo">Desde / Hasta</label>
                 <input type="text" name="tiempo" id="tiempo" value="" class="text ui-widget-content ui-corner-all" disabled>
-                <input type="hidden" name="horaini" id="horaini" value="">
-                <input type="hidden" name="horafin" id="horafin" value="">
+
                 <label for="fecha">Fecha</label>
                 <input type="text" name="fecha" id="fecha" value="" class="text ui-widget-content ui-corner-all" disabled>
-
+                <input type="hidden" name="horaini" id="horaini" value="">
+                <input type="hidden" name="horafin" id="horafin" value="">
                 <!-- Allow form submission with keyboard without duplicating the dialog button -->
                 <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
         </form>
+        @endif
     </div>
     <!-- /.modal -->
 
@@ -143,25 +171,6 @@
 
 @section('js')
     <script>
-        jQuery.extend(jQuery.validator.messages, {
-            required: "Este campo es necesario.",
-            remote: "Mejora este campo.",
-            email: "Ingresa un email correcto.",
-            url: "Ingresa un URL valido.",
-            date: "Ingresar un fecha adecuada",
-            dateISO: "Ingresar un fecha adecuada (ISO).",
-            number: "Ingresa un numero valido.",
-            digits: "Ingresa solo digitos.",
-            creditcard: "Ingresa un numero de credito correcto.",
-            equalTo: "Ingresa los mismos valores.",
-            accept: "Ingresa un valor valida.",
-            maxlength: jQuery.validator.format("Ingresa como maximo {0} caracteres."),
-            minlength: jQuery.validator.format("Ingresa como minimo {0} caracteres."),
-            rangelength: jQuery.validator.format("Ingresa un valor entre {0} y {1} caracteres."),
-            range: jQuery.validator.format("Ingresa un valor entre {0} y {1}."),
-            max: jQuery.validator.format("Ingresa un valor menor a {0}."),
-            min: jQuery.validator.format("Ingresa un valor mayor a {0}.")
-        });
 
         $(function() {
 
@@ -212,7 +221,7 @@
                         var overlay = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
                         overlay.appendTo(document.body);
 
-                        $.ajax({ method: "GET", url: "/api/visitas/bydate",
+                        $.ajax({ method: "POST", url: "/api/visitas/bydate",
                             data: {
                                 fecha: $('#current_day').text(),
                                 offset: 7
@@ -267,6 +276,10 @@
                         minlength: 8,
                         maxlength: 8,
                     },
+                    email: {
+                        required: true,
+                        email: true
+                    }
                 },
                 submitHandler: function(form) {
                     $('#visitaform input[type="submit"]').attr("disable", "disable");
@@ -274,7 +287,7 @@
             });
             var overlay0 = $('#overlay');
 
-            $.ajax({ method: "GET", url: "/api/visitas/bydate",
+            $.ajax({ method: "POST", url: "/api/visitas/bydate",
                 data: {
                     fecha: $("#current_day").text(),
                     offset: 7
@@ -330,14 +343,107 @@
                     duration: 1000
                 },
                 close: function(e){
-                    validator.resetForm();
+                    if($("#visitaform").length > 0) validator.resetForm();
                     $(".dia-selected").removeClass('dia-selected');
                     $( this ).dialog( "close" );
                 },
                 buttons: {
+                    @if( (\Illuminate\Support\Facades\Input::get("postpone")) != null )
+                    "Postergar visita": function(event) {
+                        $(event.target).prop('disabled', true);
+
+                        $.ajax({ method: "PUT", url: "api/visitas/{{ $visita->getIdvisita() }}",
+                            data: {
+                                fecha: $("#fecha").val(),
+                                horaini: $("#horaini").val(),
+                                horafin: $("#horafin").val()
+                            }
+                        }).done(function (msg) {
+
+
+                            $('#current_day').text( $('#datepicker').val() );
+
+                            $.when().then(function(){
+                                for(var i=0; i<7; i++) {
+                                    $('.table thead tr th').eq(1).remove();
+                                }
+                                var next_day = moment($('#current_day').text(), 'DD/MM/YYYY');
+                                for(var i=0; i<7; i++) {
+                                    $('.table thead tr').append("<th title='" + next_day.format('DD/MM/YYYY') + "'>" + next_day.format('dddd DD') + "</th>");
+                                    next_day.add(1, 'days');
+                                }
+
+                                var cur_day = moment($('#current_day').text(), 'DD/MM/YYYY');
+                                cur_day.hours(8);
+                                cur_day.minutes(0);
+                                $('.table tbody tr').each(function (k,v) {
+                                    $(this).find("td").not(".horas").each(function (ke,va) {
+                                        //$(this).text(cur_day.format('DD/MM/YYYY HH:mm'));
+                                        $(this).attr("data-day","d_"+cur_day.format('DD_MM_YYYY'));
+                                        $(this).attr("data-hour","d_"+cur_day.format('HH_mm'));
+                                        cur_day.add(30, 'minutes');
+                                        $(this).attr("data-hourfin","d_"+cur_day.format('HH_mm'));
+                                        cur_day.subtract(30, 'minutes');
+                                        cur_day.add(1, 'days');
+
+                                    });
+                                    cur_day.add(30, 'minutes');
+
+                                    cur_day.subtract(7, 'days');
+
+                                });
+
+                                $('.table tbody tr td').removeClass("nodisponible");
+                            }).then(function () {
+
+                                var overlay = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
+                                overlay.appendTo(document.body);
+
+                                $.ajax({ method: "POST", url: "/api/visitas/bydate",
+                                    data: {
+                                        fecha: $('#current_day').text(),
+                                        offset: 7
+                                    }
+                                }).done(function (msg) {
+
+                                    $.each(msg,function (k,v) {
+
+                                        var hini = moment(v.horaini.date);
+                                        var hfin = moment(v.horafin.date);
+
+                                        var curini = moment(v.fecha.date);
+                                        curini.hour(hini.hour());
+                                        curini.minute(hini.minute());
+
+                                        var curfin = moment(v.fecha.date);
+                                        curfin.hour(hfin.hour());
+                                        curfin.minute(hfin.minute());
+
+                                        $('td[data-day="d_'+curini.format("DD_MM_YYYY")+'"').each(function (k,v) {
+                                            var cur = moment(curini.format("DD_MM_YYYY")+" "+$(this).attr('data-hour'), "DD_MM_YYYY HH:mm");
+                                            if((cur.isAfter(curini) && cur.isBefore(curfin)) || cur.isSame(curini)){ $(this).addClass("nodisponible");}
+
+                                        });
+
+                                    });
+
+                                    overlay.fadeOut( "slow", function() {
+                                        $( this ).remove();
+                                    });
+
+                                }.bind(this));
+                            }.bind(this));
+
+
+                            $( this ).dialog( "close" );
+
+                            $(event.target).prop('disabled', false);
+                        }.bind(this));
+                    },
+                    @else
                     "Registar visita": function(event) {
 
-                        $(event.target).prop('disabled', true);
+
                         if($("#visitaform").valid()){
 
                             $.ajax({ method: "POST", url: "/api/visitas",
@@ -351,7 +457,7 @@
                                     motivo: $("#motivo").val(),
                                     piso: $("#piso").val(),
                                     dni: $("#dni").val(),
-                                    email: $("#dni").val(),
+                                    email: $("#email").val(),
                                     nombre: $("#nombre").val()
                                 }
                             }).done(function (msg) {
@@ -376,11 +482,14 @@
 
                         }
                     },
+
                     "Cancelar": function() {
                         validator.resetForm();
                         $(".dia-selected").removeClass('dia-selected');
                         $( this ).dialog( "close" );
                     }
+                    @endif
+
                 }
             });
 
@@ -418,7 +527,7 @@
                 });
 
 
-                $.when($.ajax({ method: "GET", url: "/api/visitas/bydate",
+                $.when($.ajax({ method: "POST", url: "/api/visitas/bydate",
                     data: {
                         fecha: new_day.format('DD/MM/YYYY'),
                         offset: 1
@@ -473,7 +582,7 @@
 
                 });
 
-                $.when($.ajax({ method: "GET", url: "/api/visitas/bydate",
+                $.when($.ajax({ method: "POST", url: "/api/visitas/bydate",
                     data: {
                         fecha: past_day.format('DD/MM/YYYY'),
                         offset: 1
@@ -562,10 +671,19 @@
                                 }
 
                                 if(!$('#dialog_adv').dialog('isOpen')) {
+                                    @if( (\Illuminate\Support\Facades\Input::get("postpone")) == null )
                                     $("#fecha").val(sel1.format('DD/MM/YYYY'));
                                     $("#tiempo").val(sel1.format('HH:mm') + " - " + sel2.format('HH:mm'));
                                     $("#horaini").val(sel1.format('HH:mm'));
                                     $("#horafin").val(sel2.format('HH:mm'));
+                                    @else
+                                    $("#fecha").val(sel1.format('DD/MM/YYYY'));
+                                    $("#horaini").val(sel1.format('HH:mm'));
+                                    $("#horafin").val(sel2.format('HH:mm'));
+
+                                    $("#newfecha").text(sel1.format('DD/MM/YYYY'));
+                                    $("#newtiempo").text(sel1.format('HH:mm') + " - " + sel2.format('HH:mm'));
+                                    @endif
                                     $("#dialog_new").dialog('open');
                                 }
                             }

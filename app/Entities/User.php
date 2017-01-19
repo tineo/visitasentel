@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Notifications\Notifiable;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,6 +47,13 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
      */
     public $codigo;
 
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection|Sede[]
+     * @ORM\ManyToMany(targetEntity="Sede", mappedBy="users")
+     */
+    private $sedes;
+
     /** @ORM\Column(type="datetime", nullable=false ) */
     private $created_at;
     /** @ORM\Column(type="datetime", nullable=false ) */
@@ -77,6 +84,7 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
     {
 
         $this->roles = new ArrayCollection();
+        $this->sedes = new ArrayCollection();
 
         $this->name = $name;
         $this->email = $email;
@@ -218,6 +226,27 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Co
         $this->codigo = $codigo;
     }
 
+    /**
+     * @return Sede[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getSedes()
+    {
+        return $this->sedes;
+    }
+
+    /**
+     * @param Sede[]|\Doctrine\Common\Collections\Collection $sedes
+     */
+    public function setSedes($sedes)
+    {
+        $this->sedes = $sedes;
+    }
+
+    public function addSede(Sede $sede)
+    {
+        $sede->addUser($this);
+        $this->sedes[] = $sede;
+    }
 
     /**
      * Get the e-mail address where password reset links are sent.

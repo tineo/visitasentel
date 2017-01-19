@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Sede;
 use App\Entities\User;
 use Doctrine\ORM\Query;
 
@@ -74,10 +75,39 @@ class HomeController extends Controller
                 $roles[] = "clerk";
             }
 
+            $query01 = $em->createQuery("SELECT s FROM App\Entities\Sede s WHERE s.nombre = :nombre");
+            $query01->setParameter("nombre", "sede 1");
+            $sede01 = $query01->getOneOrNullResult();
+            if ($sede01 == null) {
+                $s1 = new Sede();
+                $s1->setNombre("sede 1");
+                $s1->setDireccion("Av Peru 1351");
+                $s1->setHoraini(\DateTime::createFromFormat('H:i', "08:00"));
+                $s1->setHorafin(\DateTime::createFromFormat('H:i', "18:30"));
+                $em->persist($s1);
+
+                $sedes[] = "sede 1";
+            }
+
+            $query02 = $em->createQuery("SELECT s FROM App\Entities\Sede s WHERE s.nombre = :nombre");
+            $query02->setParameter("nombre", "sede 2");
+            $sede02 = $query02->getOneOrNullResult();
+            if ($sede02 == null) {
+                $s2 = new Sede();
+                $s2->setNombre("sede 2");
+                $s2->setDireccion("Av Argentina 4543");
+                $s2->setHoraini(\DateTime::createFromFormat('H:i', "09:00"));
+                $s2->setHorafin(\DateTime::createFromFormat('H:i', "20:00"));
+                $em->persist($s2);
+
+                $sedes[] = "sede 2";
+            }
+
             $em->flush();
 
             $user = new User("Cesar Gutierrez", "cesar@tineo.mobi", bcrypt("kokoro"));
             $user->setCodigo("996666567");
+
 
 
             $queryz = $em->createQuery("SELECT r FROM App\Entities\Role r ");
@@ -86,13 +116,19 @@ class HomeController extends Controller
             foreach ($roles as $role) {
                 $user->getRoles()->add($role);
             }
+
+            $queryx = $em->createQuery('SELECT s FROM App\Entities\Sede s ');
+            $sedes = $queryx->getResult();
+
+            foreach ($sedes as $sede) {
+                $sede->getUsers()->add($user);
+                $user->getSedes()->add($sede);
+            }
             $em->persist($user);
-
-
             $em->flush();
 
 
-            return view('home', array("roles" => $roles));
+            return view('home', array("roles" => $roles, "sedes" => $sedes));
         }else{
             abort(404);
         }

@@ -16,8 +16,6 @@
     <link rel="stylesheet" href="/css/app.css" />
     <link rel="stylesheet" href="/css/estilo.css" />
 
-
-
     <style>
         #map-canvas  {
             margin: 0;
@@ -42,8 +40,6 @@
             src="https://code.jquery.com/jquery-3.1.1.js"
             integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
             crossorigin="anonymous"></script>-->
-
-
 
 </head>
 <body>
@@ -147,7 +143,27 @@
     <script type='text/javascript' src="/js/jquery.validate.js"></script>
     <script type='text/javascript' src="/js/additional-methods.js"></script>
 
-
+    <script type="text/javascript">
+        jQuery.extend(jQuery.validator.messages, {
+            required: "Este campo es necesario.",
+            remote: "Mejora este campo.",
+            email: "Ingresa un email correcto.",
+            url: "Ingresa un URL valido.",
+            date: "Ingresar un fecha adecuada",
+            dateISO: "Ingresar un fecha adecuada (ISO).",
+            number: "Ingresa un numero valido.",
+            digits: "Ingresa solo digitos.",
+            creditcard: "Ingresa un numero de credito correcto.",
+            equalTo: "Ingresa los mismos valores.",
+            accept: "Ingresa un valor valida.",
+            maxlength: jQuery.validator.format("Ingresa como maximo {0} caracteres."),
+            minlength: jQuery.validator.format("Ingresa como minimo {0} caracteres."),
+            rangelength: jQuery.validator.format("Ingresa un valor entre {0} y {1} caracteres."),
+            range: jQuery.validator.format("Ingresa un valor entre {0} y {1}."),
+            max: jQuery.validator.format("Ingresa un valor menor a {0}."),
+            min: jQuery.validator.format("Ingresa un valor mayor a {0}.")
+        });
+    </script>
     <!-- <script src="/js/app.js"></script> -->
 
     @yield('js')

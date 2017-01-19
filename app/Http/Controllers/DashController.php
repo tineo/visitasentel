@@ -28,10 +28,10 @@ class DashController extends Controller
     }
     /**
      * Display a listing of the resource.
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
 
@@ -39,7 +39,34 @@ class DashController extends Controller
             return redirect('/visitas');
         }
 
-        return view('dash.dashboard', array("tracks" => null));
+        $query = $this->em->createQuery("SELECT u FROM App\Entities\User u WHERE u.id = :id");
+        $query->setParameter("id", Auth::user()->getId() );
+        $user = $query->getOneOrNullResult();
+        $sedes = $user->getSedes();
+
+
+        if(($request->get("postpone"))!= null){
+            $query = $this->em->createQuery("SELECT v FROM App\Entities\Visita v WHERE v.idvisita = :id");
+            $query->setParameter("id", $request->get("postpone") );
+            $visita = $query->getOneOrNullResult();
+            return view('dash.dashboard', array("visita" => $visita, "sede" => $sedes->get(0)));
+        }
+
+
+        //echo get_class($sedes);
+
+        //$sede = $sedes->get(0);
+        //echo "<pre>";
+        //echo var_dump($sedes->get(0));
+        //foreach ($sedes as $sede){
+        //   echo $sedes[0]->getNombre();
+        //}
+        //, array("horaini" => $sede->getHoraini(),"horafin" => $sede->getHorafin())
+        //var_dump(count(Auth::user()->getId()));
+        //echo "</pre>";
+        //$sedes1 = array("nombre" => "test", "horaini" => new \DateTime(), "horafin" => new \DateTime());
+
+        return view('dash.dashboard', array("sede" => $sedes->get(0)));
     }
 
     /**

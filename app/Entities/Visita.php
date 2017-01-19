@@ -50,6 +50,14 @@ class Visita
     /** @ORM\Column(type="datetime", nullable=false ) */
     private $registerat;
 
+    /*
+     * 0 : no confirmed
+     * 1 : confrimed
+     * 2 : canceled
+     */
+    /** @ORM\Column(type="integer", options={"default" : 0} ) */
+    private $state;
+
     private $visitante;
 
     /** @ORM\OneToMany(targetEntity="Asistente", mappedBy="idvisita")
@@ -240,6 +248,22 @@ class Visita
     public function setVisitantes($visitantes)
     {
         $this->visitantes = $visitantes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
 

@@ -96,6 +96,23 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="password-confirm" class="col-md-4 control-label">Sedes</label>
+
+                            <div class="col-md-6">
+
+                                @foreach($sedes as $sede)
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="radio" name="sedes[]" value="{{ $sede->getIdsede() }}">
+                                            {{ $sede->getNombre() }}
+                                        </label>
+                                    </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+
 
 
 

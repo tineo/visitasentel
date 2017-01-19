@@ -55,7 +55,9 @@ class RegisterController extends Controller
         $em = app('Doctrine\ORM\EntityManagerInterface');
         $query = $em->createQuery("SELECT r FROM App\Entities\Role r");
         $roles = $query->getResult();
-        return view('auth.register', array("roles" => $roles));
+        $query2 = $em->createQuery("SELECT s FROM App\Entities\Sede s");
+        $sedes = $query2->getResult();
+        return view('auth.register', array("roles" => $roles, "sedes" => $sedes));
     }
 
     /**
@@ -94,6 +96,14 @@ class RegisterController extends Controller
             $query->setParameter("id", $role);
             $role = $query->getOneOrNullResult();
             $user->getRoles()->add($role);
+        }
+
+        foreach (Input::get('sedes') as $idsede){
+            $query = $em->createQuery("SELECT r FROM App\Entities\Sede r WHERE r.idsede = :idsede");
+            $query->setParameter("idsede", $idsede);
+            $sede = $query->getOneOrNullResult();
+            $sede->getUsers()->add($user);
+            $user->getSedes()->add($sede);
         }
 
         //$user->addRole("admin");

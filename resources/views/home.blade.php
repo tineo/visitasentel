@@ -12,6 +12,10 @@
                     @foreach($roles as $role)
                         <li>{{ $role->getName() }}</li>
                     @endforeach
+
+                        @foreach($sedes as $sede)
+                            <li>{{ $sede->getNombre() }}</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>

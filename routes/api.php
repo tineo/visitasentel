@@ -22,9 +22,12 @@ Route::resource('tracking', 'TrackingController',
     ['only' => ['index', 'store', 'update', 'destroy', 'show']]);
 */
 Route::resource('visitas', 'VisitasController',
-    ['only' => ['store']]);
+    ['only' => ['store','update']]);
 
 /*Route::resource('dashboard', 'DashController',
     ['only' => ['store']]);*/
 
-Route::get('visitas/bydate', ['uses' => 'VisitasController@bydate', 'as' => 'visitas.bydate']);
+Route::post('visitas/bydate', ['uses' => 'VisitasController@bydate', 'as' => 'visitas.bydate']);
+Route::post('visitas/addvisitante', ['uses' => 'VisitasController@addvisitante', 'as' => 'visitas.addvisitante']);
+Route::post('visitas/delvisitante', ['uses' => 'VisitasController@delvisitante', 'as' => 'visitas.delvisitante']);
+Route::post('visitas/changestate', ['uses' => 'VisitasController@changestate', 'as' => 'visitas.changestate']);
