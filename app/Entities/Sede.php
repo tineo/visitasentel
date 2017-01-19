@@ -42,7 +42,7 @@ class Sede
     /**
      * Many Users have Many Groups.
      * @var \Doctrine\Common\Collections\Collection|User[]
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="sedes")
+     * @ORM\ManyToMany(targetEntity="User")
      * @ORM\JoinTable(name="users_sedes",
      *      joinColumns={@ORM\JoinColumn(name="sede_id", referencedColumnName="idsede")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
