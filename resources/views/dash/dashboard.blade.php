@@ -104,8 +104,8 @@
                                     @endfor
                                     <?php $now->modify('-7 day')?>
                                 </tr>
-                                <?php $now->add(new \DateInterval('PT30M')) ?>
-                                <?php $then->add(new \DateInterval('PT30M')) ?>
+                                <?php $now->add(new \DateInterval('PT60M')) ?>
+                                <?php $then->add(new \DateInterval('PT60M')) ?>
 
                             @endfor
 
