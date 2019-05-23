@@ -78,7 +78,7 @@
 
                     @else
                         @if(Auth::user()->hasRoleByName(['user','admin']))
-                        <li><a href="{{ url('/dashboard') }}">Registrar visita</a></li>
+                        <li><a href="{{ url('/dashboard') }}">Registrar curso</a></li>
                         @endif
 
                         @if(Auth::user()->hasRoleByName(['admin']))
@@ -86,11 +86,11 @@
                         @endif
 
                         @if(Auth::user()->hasRoleByName(['clerk','admin']))
-                        <li><a href="{{ url('/visitas/') }}">Lista de visitas</a></li>
+                        <li><a href="{{ url('/visitas/') }}">Lista de cursos</a></li>
                         @endif
 
                         @if(Auth::user()->hasRoleByName(['user','admin']))
-                        <li><a href="{{ url('/visitas/me') }}">Mis visitas</a></li>
+                        <li><a href="{{ url('/visitas/me') }}">Mis cursos</a></li>
                         @endif
 
 
