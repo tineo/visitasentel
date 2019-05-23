@@ -126,7 +126,7 @@
         <div class="container-footer">
             <div class="row">
                 <div class="col-md-12">
-                    2016 - Entel. Todos los derechos de reservados.
+                    2019 - Calidad de Software - FISI.
                 </div>
             </div>
         </div>
