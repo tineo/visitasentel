@@ -115,12 +115,12 @@
 
     <div id="dialog_new" title="Disponibilidad" >
         @if( (\Illuminate\Support\Facades\Input::get("postpone")) != null )
-            <h5>Fecha y hora actual de la visita</h5>
+            <h5>Fecha y hora actual del curso</h5>
             <div>
                 <span>{{ $visita->getFecha()->format('d/m/Y') }} </span>
                 <span>{{ $visita->getHoraini()->format('H:i') }} / {{ $visita->getHorafin()->format('H:i') }}</span>
             </div>
-            <h5>Fecha y hora nueva de la visita</h5>
+            <h5>Fecha y hora nueva de la disponibilidad</h5>
             <input type="hidden" name="fecha" id="fecha" value="">
             <input type="hidden" name="horaini" id="horaini" value="">
             <input type="hidden" name="horafin" id="horafin" value="">
