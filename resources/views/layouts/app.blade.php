@@ -82,15 +82,15 @@
                         @endif
 
                         @if(Auth::user()->hasRoleByName(['admin']))
-                        <li><a href="{{ url('/users') }}">Usuarios</a></li>
+                        <li><a href="{{-- url('/users') --}}">Usuarios</a></li>
                         @endif
 
                         @if(Auth::user()->hasRoleByName(['clerk','admin']))
-                        <li><a href="{{ url('/visitas/') }}">Lista de cursos</a></li>
+                        <li><a href="{{-- url('/visitas/') --}}">Lista de cursos</a></li>
                         @endif
 
                         @if(Auth::user()->hasRoleByName(['user','admin']))
-                        <li><a href="{{ url('/visitas/me') }}">Mis cursos</a></li>
+                        <li><a href="{{-- url('/visitas/me') --}}">Mis cursos</a></li>
                         @endif
 
 
