@@ -42,13 +42,21 @@
                             $now = new \DateTime();
 
 
-                                $days = array( "Monday" => "Lunes",
+                                /*$days = array( "Monday" => "Lunes",
                                         "Tuesday" => "Martes",
                                         "Wednesday" => "Miercoles",
                                         "Thursday" => "Jueves",
                                         "Friday" => "Viernes",
                                         "Saturday" => "Sabado",
                                         "Sunday" => "Domingo"
+                                        )*/
+                                        $days = array( "Monday" => "Sabado",
+                                        "Tuesday" => "Domingo",
+                                        "Wednesday" => "Lunes",
+                                        "Thursday" => "Martes",
+                                        "Friday" => "Miercoles",
+                                        "Saturday" => "Jueves",
+                                        "Sunday" => "Viernes"
                                         )
                             ?>
 
@@ -57,7 +65,7 @@
                                     <th class="horas">Horas</th>
                                     @for ($i = 0; $i < 7; $i++)
                                         <th title="{{strftime("%d/%m/%y", $now->getTimestamp()) }}">{{ $days[strftime("%A", $now->getTimestamp())] }}
-                                            {{strftime("%d", $now->getTimestamp()) }}</th>
+                                            {{-- strftime("%d", $now->getTimestamp()) --}}</th>
                                         <?php $now->modify('+1 day')?>
                                     @endfor
 
