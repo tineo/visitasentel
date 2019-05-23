@@ -228,8 +228,8 @@
                         $('.table tbody tr td').removeClass("nodisponible");
                     }).then(function () {
 
-                        //var overlay = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
-                        //overlay.appendTo(document.body);
+                        var overlay = jQuery('<div id="overlay"></div>');
+                        overlay.appendTo(document.body);
 
                         $.ajax({ method: "POST", url: "/api/visitas/bydate",
                             data: {
