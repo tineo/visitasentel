@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Visitas') }}</title>
+    <title>{{ config('app.name', 'Disponibilidad Academica') }}</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="/css/jquery-ui.css" />
@@ -57,8 +57,8 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="/images/entel.png"  height="100%" style="display: inline"/>
-                    <span style="font-size: 14px; font-weight: bold;">{{ config('app.name', 'Laravel') }}</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/UNMSM_Escudo_y_Nombre_2.png/120px-UNMSM_Escudo_y_Nombre_2.png"  height="100%" style="display: inline"/>
+                    <span style="font-size: 14px; font-weight: bold;">{{ config('app.name', 'Disponibilidad') }}</span>
                 </a>
             </div>
 
