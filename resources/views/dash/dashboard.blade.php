@@ -277,8 +277,8 @@
                         maxlength: 8,
                     },
                     email: {
-                        required: true,
-                        email: true
+                        required: false,
+                        email: false
                     }
                 },
                 submitHandler: function(form) {
@@ -457,7 +457,7 @@
                                     motivo: $("#motivo").val(),
                                     piso: $("#piso").val(),
                                     dni: $("#dni").val(),
-                                    email: $("#email").val(),
+                                    email: $("#email2").val(),
                                     nombre: $("#nombre").val()
                                 }
                             }).done(function (msg) {
