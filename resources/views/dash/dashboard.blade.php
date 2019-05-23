@@ -130,14 +130,14 @@
         <h6>Registro de visitas</h6>
         <form id="visitaform">
             <fieldset>
-                <label for="nombre">Nombre de visita</label>
+                <!--label for="nombre">Nombre de visita</label--><label for="nombre">Nombre del curso</label>
                 <input type="text" name="nombre" id="nombre" value="" class="text ui-widget-content ui-corner-all" required>
-                <label for="dni">DNI de visita</label>
+                <!--label for="dni">DNI de visita</label--> <label for="dni">Ingrese Código de profesor</label>
                 <input type="text" name="dni" id="dni" value="" class="text ui-widget-content ui-corner-all">
-                <label for="empresa">Empresa de visita</label>
-                <input type="text" name="empresa" id="empresa" value="" class="text ui-widget-content ui-corner-all">
-                <label for="empresa">Email de visita</label>
-                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all">
+                <!--label for="empresa">Email de visita</label--><label for="empresa">comentario</label>
+                <input type="text" name="email" id="email2" value="" class="text ui-widget-content ui-corner-all">
+                <!--label for="empresa">Empresa de visita</label>
+                <input type="hidden" name="empresa" id="empresa" value="" class="text ui-widget-content ui-corner-all">
                 <label for="motivo">Motivo</label>
                 <input type="text" name="motivo" id="motivo" value="" class="text ui-widget-content ui-corner-all">
                 <label for="contacto">Contacto Entel</label>
@@ -153,7 +153,7 @@
                 <input type="text" name="fecha" id="fecha" value="" class="text ui-widget-content ui-corner-all" disabled>
                 <input type="hidden" name="horaini" id="horaini" value="">
                 <input type="hidden" name="horafin" id="horafin" value="">
-                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                 Allow form submission with keyboard without duplicating the dialog button -->
                 <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
         </form>

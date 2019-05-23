@@ -19,7 +19,7 @@
                             --}}
                             <div class="row">
                                 <div class="col-md-4 col-xs-12 col-sm-4">
-                                    <h3>Registro de visita </h3>
+                                    <h3>Registro de disponibilidad </h3>
                                     <span style="display: none" id="visitaid">{{ $visita->getIdvisita() }}</span>
                                 </div>
                                 <div class="col-md-5 col-xs-12 col-sm-6">
@@ -80,11 +80,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-4 col-xs-12 col-sm-4"><b>Nombre de visita:</b></div>
+                                        <div class="col-md-4 col-xs-12 col-sm-4"><!--b>Nombre de visita:</b--> <b>Nombre del curso:</b> </div>
                                         <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getVisitantes()->get(0)->getNombre() }}</div>
-                                        <div class="col-md-4 col-xs-12 col-sm-4"><b>DNI de visita:</b></div>
+                                        <div class="col-md-4 col-xs-12 col-sm-4"><!--<b>DNI de visita:</b> --><b>Código del profesor:</b></div>
                                         <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getVisitantes()->get(0)->getDni() }}</div>
-                                        <div class="col-md-4 col-xs-12 col-sm-4"><b>Empresa de visita:</b></div>
+                                        <!--<div class="col-md-4 col-xs-12 col-sm-4"><b>Empresa de visita:</b></div>
                                         <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getVisitantes()->get(0)->getEmpresa() }}</div>
                                         <div class="col-md-4 col-xs-12 col-sm-4"><b>Motivo:</b></div>
                                         <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getVisitantes()->get(0)->getMotivo() }}</div>
@@ -95,7 +95,7 @@
                                         <div class="col-md-4 col-xs-12 col-sm-4"><b>Desde / Hasta:</b></div>
                                         <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getHoraini()->format('H:i') }} / {{ $visita->getHorafin()->format('H:i') }}</div>
                                         <div class="col-md-4 col-xs-12 col-sm-4"><b>Fecha:</b></div>
-                                        <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getFecha()->format('d/m/Y') }}</div>
+                                        <div class="col-md-6 col-xs-12 col-sm-8">{{ $visita->getFecha()->format('d/m/Y') }}</div>-->
                                     </div>
                                 </div>
                             </div>
