@@ -84,7 +84,9 @@
                             //$now->setTime(8,0);
                             //$then = new \DateTime();
                             //$then->setTime(8,0);
-                            $then->add(new \DateInterval('PT30M'));
+                            
+                            //$then->add(new \DateInterval('PT30M'));
+                            $then->add(new \DateInterval('PT60M'));
                             ?>
 
                             @for ($i = 0; $now < $last; $i++)
