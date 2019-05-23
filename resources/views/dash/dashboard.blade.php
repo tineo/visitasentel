@@ -175,7 +175,7 @@
         <p>Este horario no es disponible.</p>
     </div>
     <!-- Initial overlay not by jquery-->
-    <div id="overlay"><img src="/images/entel.png"/></div>
+    <!--<div id="overlay"><img src="/images/entel.png"/></div>-->
 
 @endsection
 
@@ -406,8 +406,8 @@
                                 $('.table tbody tr td').removeClass("nodisponible");
                             }).then(function () {
 
-                                var overlay = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
-                                overlay.appendTo(document.body);
+                                //var overlay = jQuery('<div id="overlay"><img src="/images/entel.png"/></div>');
+                                //overlay.appendTo(document.body);
 
                                 $.ajax({ method: "POST", url: "/api/visitas/bydate",
                                     data: {
@@ -437,9 +437,9 @@
 
                                     });
 
-                                    overlay.fadeOut( "slow", function() {
-                                        $( this ).remove();
-                                    });
+                                    //overlay.fadeOut( "slow", function() {
+                                    //    $( this ).remove();
+                                    //});
 
                                 }.bind(this));
                             }.bind(this));
