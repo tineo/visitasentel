@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Visitas programadas
+                    <div class="panel-heading">Cursos programados
                         <span id="current_day"></span>
                         <span class="sedespan"><b>{{ $sede->getNombre() }}</b></span>
                         <span>({{$sede->getHoraini()->format('H:i')}} - {{$sede->getHorafin()->format('H:i')}})</span>
@@ -127,7 +127,7 @@
             <div><span id="newfecha"></span> <span id="newtiempo"></span></div>
         @else
         <p class="validateTips"></p>
-        <h6>Registro de visitas</h6>
+        <h6>Registro de disponibilidad</h6>
         <form id="visitaform">
             <fieldset>
                 <!--label for="nombre">Nombre de visita</label--><label for="nombre">Nombre del curso</label>
