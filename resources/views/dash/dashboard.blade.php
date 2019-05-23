@@ -23,8 +23,8 @@
                         <span class="sedespan"><b>{{ $sede->getNombre() }}</b></span>
                         <span>({{$sede->getHoraini()->format('H:i')}} - {{$sede->getHorafin()->format('H:i')}})</span>
                     </div>
-                    <div class="panel-heading" id="controles">
-                        <button class="ui-button ui-widget ui-corner-all" id="oneless"><<</button>
+                    <div class="panel-heading" id="controles" style="opacity:0">
+                        <button class="ui-button ui-widget ui-corner-all" id="oneless" ><<</button>
                         <input type="text" id="datepicker">
                         <button class="ui-button ui-widget ui-corner-all" id="onemore">>></button>
 
