@@ -295,7 +295,7 @@
                     $('#visitaform input[type="submit"]').attr("disable", "disable");
                 }
             });
-            var overlay0 = $('#overlay');
+            //var overlay0 = $('#overlay');
 
             $.ajax({ method: "POST", url: "/api/visitas/bydate",
                 data: {
@@ -324,9 +324,9 @@
                     });
 
                 });
-                overlay0.fadeOut( "slow", function() {
-                    $( this ).remove();
-                });
+                //overlay0.fadeOut( "slow", function() {
+                //    $( this ).remove();
+                //});
 
             }.bind(this));
 
