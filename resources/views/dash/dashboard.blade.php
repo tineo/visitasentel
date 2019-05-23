@@ -113,7 +113,7 @@
 
     </style>
 
-    <div id="dialog_new" title="Visitas" >
+    <div id="dialog_new" title="Disponibilidad" >
         @if( (\Illuminate\Support\Facades\Input::get("postpone")) != null )
             <h5>Fecha y hora actual de la visita</h5>
             <div>
